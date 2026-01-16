@@ -2059,10 +2059,9 @@ export default function SilverAgency() {
                   borderRadius: '16px',
                   border: `1px solid ${activeFaq === i ? c.accent : c.border}`,
                   overflow: 'hidden',
-                  transition: 'all 0.3s ease',
                   backdropFilter: 'blur(20px)',
                   boxShadow: activeFaq === i ? `0 10px 30px ${c.glow}` : 'none',
-                  ...revealStyle(faqReveal.isVisible, 0.05 * i),
+                  transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
                 }}
               >
                 <button
