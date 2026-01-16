@@ -692,11 +692,11 @@ export default function SilverAgency() {
           {/* Pink peeker character - holding onto section from top */}
           <div style={{
             position: 'absolute',
-            top: isMobile ? '-100px' : '-130px',
+            top: isMobile ? '-140px' : '-180px',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: isMobile ? '180px' : '240px',
-            height: isMobile ? '110px' : '150px',
+            width: isMobile ? '220px' : '320px',
+            height: isMobile ? '150px' : '200px',
             zIndex: 20,
             pointerEvents: 'none',
           }}>
