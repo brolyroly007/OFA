@@ -701,13 +701,14 @@ export default function SilverAgency() {
 
           {/* Comparison table with peeker */}
           <div style={{ position: 'relative' }}>
-            {/* Pink peeker character */}
+            {/* Pink peeker character - holding onto container edge */}
             <div style={{
               position: 'absolute',
-              top: isMobile ? '-60px' : '-80px',
-              left: isMobile ? '10px' : '30px',
-              width: isMobile ? '100px' : '140px',
-              height: isMobile ? '80px' : '110px',
+              top: isMobile ? '-45px' : '-65px',
+              left: isMobile ? '50%' : '50%',
+              transform: 'translateX(-50%)',
+              width: isMobile ? '120px' : '160px',
+              height: isMobile ? '70px' : '95px',
               zIndex: 20,
               pointerEvents: 'none',
             }}>
@@ -715,7 +716,7 @@ export default function SilverAgency() {
                 src="/images/peeker-pink.gif"
                 alt="Peeker"
                 fill
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: 'contain', objectPosition: 'bottom' }}
                 unoptimized
               />
             </div>
