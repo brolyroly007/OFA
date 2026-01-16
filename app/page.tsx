@@ -2,6 +2,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+const ThreeBackground = dynamic(() => import('./components/ThreeBackground'), {
+  ssr: false,
+});
 
 const translations = {
   es: {
@@ -418,6 +423,9 @@ export default function SilverAgency() {
         }
       `}</style>
 
+      {/* Three.js 3D Background */}
+      <ThreeBackground text="SILVER" />
+
       {/* Animated GIF background with blur */}
       <div style={{
         position: 'fixed',
@@ -432,7 +440,7 @@ export default function SilverAgency() {
           fill
           style={{
             objectFit: 'cover',
-            opacity: 0.5,
+            opacity: 0.3,
             filter: 'blur(3px)',
             transform: 'scale(1.05)',
           }}
