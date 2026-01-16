@@ -284,6 +284,7 @@ const useCounter = (end: number, duration: number = 2000) => {
 
 export default function SilverAgency() {
   const [scrollY, setScrollY] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [formData, setFormData] = useState({ name: '', handle: '', platform: '', followers: '', contact: '' });
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -336,7 +337,11 @@ export default function SilverAgency() {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    const handleScroll = () => setScrollY(window.scrollY);
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0);
+    };
     window.addEventListener('scroll', handleScroll);
     const interval = setInterval(() => setActiveTestimonial((p) => (p + 1) % 3), 5000);
     return () => {
@@ -431,7 +436,7 @@ export default function SilverAgency() {
         position: 'fixed',
         top: 0, left: 0,
         height: '3px',
-        width: `${(scrollY / (document.documentElement.scrollHeight - window.innerHeight || 1)) * 100}%`,
+        width: `${scrollProgress}%`,
         background: c.gradient2,
         zIndex: 1000,
       }} />
