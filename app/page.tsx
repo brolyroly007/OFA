@@ -313,10 +313,10 @@ export default function LuxorAgencyPremium() {
 
   const cursorSize = cursorVariant === 'hover' ? 100 : cursorVariant === 'text' ? 150 : 20;
 
-  const sectionStyle = (id: string): React.CSSProperties => ({
-    opacity: visibleSections.has(id) ? 1 : 0,
-    transform: visibleSections.has(id) ? 'translateY(0)' : 'translateY(60px)',
-    transition: 'opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1)',
+  // Removed scroll animations - sections are always visible now
+  const sectionStyle = (_id: string): React.CSSProperties => ({
+    opacity: 1,
+    transform: 'translateY(0)',
   });
 
   // Loading Screen
