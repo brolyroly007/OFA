@@ -695,8 +695,8 @@ export default function SilverAgency() {
             top: isMobile ? '-140px' : '-180px',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: isMobile ? '220px' : '320px',
-            height: isMobile ? '150px' : '200px',
+            width: isMobile ? '280px' : '400px',
+            height: isMobile ? '130px' : '160px',
             zIndex: 20,
             pointerEvents: 'none',
           }}>
