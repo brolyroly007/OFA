@@ -7,7 +7,6 @@ const translations = {
     nav: {
       services: 'Servicios',
       process: 'Proceso',
-      team: 'Equipo',
       testimonials: 'Resultados',
       faq: 'FAQ',
       apply: 'Aplica',
@@ -131,7 +130,6 @@ const translations = {
     nav: {
       services: 'Services',
       process: 'Process',
-      team: 'Team',
       testimonials: 'Results',
       faq: 'FAQ',
       apply: 'Apply',
@@ -253,31 +251,8 @@ const translations = {
   },
 };
 
-function useScrollAnimation() {
-  const [visible, setVisible] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisible((prev) => new Set([...prev, entry.target.id]));
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-    );
-
-    document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  return visible;
-}
-
 export default function SilverAgency() {
   const [scrollY, setScrollY] = useState(0);
-  const [showContent, setShowContent] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [formData, setFormData] = useState({ name: '', handle: '', platform: '', followers: '', contact: '' });
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -287,21 +262,17 @@ export default function SilverAgency() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const visible = useScrollAnimation();
   const t = translations[lang];
 
-  // Colors - subtle, elegant with hint of sensuality
   const c = {
     bg: '#0a0a0b',
-    bgAlt: '#111113',
-    bgCard: '#161619',
-    text: '#e8e8ea',
-    textMuted: '#888890',
-    textDim: '#55555a',
-    accent: '#c8a4b4', // subtle rose/mauve for sensuality
-    accentMuted: '#9a7a88',
+    bgAlt: '#0f0f11',
+    bgCard: '#141417',
+    text: '#f0f0f2',
+    textMuted: '#a0a0a8',
+    textDim: '#606068',
+    accent: '#c8a4b4',
     border: '#252528',
-    borderLight: '#333338',
   };
 
   useEffect(() => {
@@ -311,8 +282,6 @@ export default function SilverAgency() {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
-
-    setTimeout(() => setShowContent(true), 800);
 
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
@@ -336,71 +305,18 @@ export default function SilverAgency() {
     }
   };
 
-  const fadeIn = (isVisible: boolean): React.CSSProperties => ({
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-    transition: 'all 0.7s ease',
-  });
-
-  // Loading
-  if (!showContent) {
-    return (
-      <div style={{
-        position: 'fixed',
-        inset: 0,
-        background: c.bg,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        gap: '1.5rem',
-      }}>
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
-          @keyframes fade { 0%,100%{opacity:.3} 50%{opacity:1} }
-        `}</style>
-        <div style={{
-          fontFamily: 'Inter, sans-serif',
-          fontSize: '1.8rem',
-          fontWeight: 300,
-          letterSpacing: '0.3em',
-          color: c.text,
-        }}>
-          SILVER
-        </div>
-        <div style={{
-          width: 100,
-          height: 1,
-          background: c.accent,
-          animation: 'fade 1.5s ease infinite',
-        }} />
-      </div>
-    );
-  }
-
   return (
     <div style={{
       minHeight: '100vh',
       background: c.bg,
       color: c.text,
-      fontFamily: 'Inter, sans-serif',
-      overflowX: 'hidden',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
-        ::selection { background: ${c.accent}40; }
+        ::selection { background: ${c.accent}50; }
         input::placeholder { color: ${c.textDim}; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: ${c.bg}; }
-        ::-webkit-scrollbar-thumb { background: ${c.border}; border-radius: 3px; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .fadeUp { animation: fadeUp 0.6s ease forwards; }
-        .fadeUp-1 { animation-delay: 0.1s; opacity: 0; }
-        .fadeUp-2 { animation-delay: 0.2s; opacity: 0; }
-        .fadeUp-3 { animation-delay: 0.3s; opacity: 0; }
-        .fadeUp-4 { animation-delay: 0.4s; opacity: 0; }
       `}</style>
 
       {/* Nav */}
@@ -409,20 +325,19 @@ export default function SilverAgency() {
         top: 0,
         left: 0,
         right: 0,
-        padding: isMobile ? '1rem 1.5rem' : '1.2rem 4rem',
+        padding: isMobile ? '1.2rem 1.5rem' : '1.2rem 4rem',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         zIndex: 100,
-        background: scrollY > 50 ? `${c.bg}f0` : 'transparent',
+        background: scrollY > 50 ? `${c.bg}ee` : 'transparent',
         backdropFilter: scrollY > 50 ? 'blur(10px)' : 'none',
-        borderBottom: scrollY > 50 ? `1px solid ${c.border}` : 'none',
         transition: 'all 0.3s ease',
       }}>
         <a href="#" style={{
-          fontSize: '1.2rem',
+          fontSize: isMobile ? '1.4rem' : '1.6rem',
           fontWeight: 300,
-          letterSpacing: '0.25em',
+          letterSpacing: '0.2em',
           color: c.text,
           textDecoration: 'none',
         }}>
@@ -430,8 +345,8 @@ export default function SilverAgency() {
         </a>
 
         {!isMobile && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2.5rem' }}>
-            <div style={{ display: 'flex', gap: '0.3rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
               {['es', 'en'].map((l) => (
                 <button
                   key={l}
@@ -440,19 +355,18 @@ export default function SilverAgency() {
                     background: lang === l ? c.accent : 'transparent',
                     border: 'none',
                     color: lang === l ? c.bg : c.textMuted,
-                    padding: '0.4rem 0.7rem',
-                    borderRadius: '3px',
-                    fontSize: '0.65rem',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '4px',
+                    fontSize: '0.9rem',
                     fontWeight: 500,
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease',
                   }}
                 >
                   {l.toUpperCase()}
                 </button>
               ))}
             </div>
-            <div style={{ display: 'flex', gap: '2rem' }}>
+            <div style={{ display: 'flex', gap: '2.5rem' }}>
               {['services', 'process', 'testimonials', 'faq'].map((key) => (
                 <a
                   key={key}
@@ -460,9 +374,8 @@ export default function SilverAgency() {
                   style={{
                     color: c.textMuted,
                     textDecoration: 'none',
-                    fontSize: '0.8rem',
-                    fontWeight: 400,
-                    transition: 'color 0.2s ease',
+                    fontSize: '1rem',
+                    transition: 'color 0.2s',
                   }}
                   onMouseOver={(e) => e.currentTarget.style.color = c.text}
                   onMouseOut={(e) => e.currentTarget.style.color = c.textMuted}
@@ -476,15 +389,12 @@ export default function SilverAgency() {
               style={{
                 background: c.accent,
                 color: c.bg,
-                padding: '0.6rem 1.5rem',
-                borderRadius: '4px',
+                padding: '0.8rem 2rem',
+                borderRadius: '6px',
                 textDecoration: 'none',
-                fontSize: '0.75rem',
+                fontSize: '1rem',
                 fontWeight: 500,
-                transition: 'opacity 0.2s ease',
               }}
-              onMouseOver={(e) => e.currentTarget.style.opacity = '0.85'}
-              onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
             >
               {t.nav.apply}
             </a>
@@ -498,7 +408,7 @@ export default function SilverAgency() {
               background: 'none',
               border: 'none',
               color: c.text,
-              fontSize: '1.3rem',
+              fontSize: '1.8rem',
               cursor: 'pointer',
             }}
           >
@@ -511,7 +421,7 @@ export default function SilverAgency() {
       {isMobile && menuOpen && (
         <div style={{
           position: 'fixed',
-          top: '60px',
+          top: '70px',
           left: 0,
           right: 0,
           bottom: 0,
@@ -530,8 +440,8 @@ export default function SilverAgency() {
               style={{
                 color: c.text,
                 textDecoration: 'none',
-                fontSize: '1.1rem',
-                padding: '0.8rem 0',
+                fontSize: '1.3rem',
+                padding: '1rem 0',
                 borderBottom: `1px solid ${c.border}`,
               }}
             >
@@ -547,9 +457,9 @@ export default function SilverAgency() {
                   background: lang === l ? c.accent : 'transparent',
                   border: `1px solid ${c.border}`,
                   color: lang === l ? c.bg : c.text,
-                  padding: '0.7rem 1.5rem',
-                  borderRadius: '4px',
-                  fontSize: '0.85rem',
+                  padding: '1rem 2rem',
+                  borderRadius: '6px',
+                  fontSize: '1rem',
                   cursor: 'pointer',
                 }}
               >
@@ -563,10 +473,10 @@ export default function SilverAgency() {
             style={{
               background: c.accent,
               color: c.bg,
-              padding: '1rem',
-              borderRadius: '6px',
+              padding: '1.2rem',
+              borderRadius: '8px',
               textDecoration: 'none',
-              fontSize: '1rem',
+              fontSize: '1.1rem',
               fontWeight: 500,
               textAlign: 'center',
               marginTop: '1rem',
@@ -578,46 +488,46 @@ export default function SilverAgency() {
       )}
 
       {/* Hero */}
-      <section id="hero" style={{
+      <section style={{
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: isMobile ? '8rem 1.5rem 4rem' : '0 4rem',
+        padding: isMobile ? '8rem 2rem 4rem' : '0 4rem',
         position: 'relative',
       }}>
-        <div style={{ maxWidth: '750px', textAlign: 'center' }}>
-          <div className="fadeUp fadeUp-1" style={{
-            fontSize: '0.7rem',
+        <div style={{ maxWidth: '800px', textAlign: 'center' }}>
+          <div style={{
+            fontSize: isMobile ? '0.9rem' : '1rem',
             fontWeight: 500,
-            letterSpacing: '0.25em',
+            letterSpacing: '0.2em',
             color: c.accent,
             marginBottom: '2rem',
           }}>
             {t.hero.overline}
           </div>
 
-          <h1 className="fadeUp fadeUp-2" style={{
-            fontSize: isMobile ? '2.5rem' : '3.8rem',
+          <h1 style={{
+            fontSize: isMobile ? '3rem' : '5rem',
             fontWeight: 300,
-            lineHeight: 1.15,
+            lineHeight: 1.1,
             marginBottom: '2rem',
           }}>
             <span style={{ display: 'block' }}>{t.hero.title1}</span>
             <span style={{ color: c.accent }}>{t.hero.title2}</span>
           </h1>
 
-          <p className="fadeUp fadeUp-3" style={{
-            fontSize: isMobile ? '1rem' : '1.1rem',
+          <p style={{
+            fontSize: isMobile ? '1.1rem' : '1.3rem',
             lineHeight: 1.8,
             color: c.textMuted,
-            maxWidth: '550px',
-            margin: '0 auto 2.5rem',
+            maxWidth: '600px',
+            margin: '0 auto 3rem',
           }}>
             {t.hero.subtitle}
           </p>
 
-          <div className="fadeUp fadeUp-4" style={{
+          <div style={{
             display: 'flex',
             flexDirection: isMobile ? 'column' : 'row',
             gap: '1rem',
@@ -626,25 +536,22 @@ export default function SilverAgency() {
             <a href="#apply" style={{
               background: c.accent,
               color: c.bg,
-              padding: '1rem 2.5rem',
-              borderRadius: '5px',
+              padding: '1.2rem 3rem',
+              borderRadius: '8px',
               textDecoration: 'none',
-              fontSize: '0.85rem',
+              fontSize: '1.1rem',
               fontWeight: 500,
-              transition: 'opacity 0.2s ease',
             }}>
               {t.hero.cta}
             </a>
             <a href="#services" style={{
               background: 'transparent',
               color: c.text,
-              padding: '1rem 2.5rem',
-              borderRadius: '5px',
+              padding: '1.2rem 3rem',
+              borderRadius: '8px',
               textDecoration: 'none',
-              fontSize: '0.85rem',
-              fontWeight: 400,
+              fontSize: '1.1rem',
               border: `1px solid ${c.border}`,
-              transition: 'border-color 0.2s ease',
             }}>
               {t.hero.cta2}
             </a>
@@ -654,11 +561,11 @@ export default function SilverAgency() {
         {/* Stats */}
         <div style={{
           position: 'absolute',
-          bottom: isMobile ? '2rem' : '4rem',
+          bottom: isMobile ? '3rem' : '5rem',
           left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex',
-          gap: isMobile ? '2rem' : '4rem',
+          gap: isMobile ? '3rem' : '5rem',
         }}>
           {[
             { val: '50+', label: t.stats.models },
@@ -666,30 +573,29 @@ export default function SilverAgency() {
             { val: '200%', label: t.stats.growth },
           ].map((s, i) => (
             <div key={i} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: isMobile ? '1.5rem' : '2rem', fontWeight: 300, color: c.text }}>{s.val}</div>
-              <div style={{ fontSize: '0.65rem', color: c.textDim, letterSpacing: '0.1em', marginTop: '0.3rem' }}>{s.label}</div>
+              <div style={{ fontSize: isMobile ? '2rem' : '2.5rem', fontWeight: 300, color: c.text }}>{s.val}</div>
+              <div style={{ fontSize: isMobile ? '0.9rem' : '1rem', color: c.textDim, marginTop: '0.5rem' }}>{s.label}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Why Us */}
-      <section id="whyus" data-animate style={{
-        padding: isMobile ? '5rem 1.5rem' : '7rem 4rem',
+      <section id="whyus" style={{
+        padding: isMobile ? '5rem 2rem' : '8rem 4rem',
         background: c.bgAlt,
-        ...fadeIn(visible.has('whyus')),
       }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '0.8rem' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '1rem' }}>
               {t.whyUs.overline}
             </div>
-            <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 300 }}>{t.whyUs.title}</h2>
+            <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: 300 }}>{t.whyUs.title}</h2>
           </div>
 
           <div style={{
             background: c.bgCard,
-            borderRadius: '8px',
+            borderRadius: '12px',
             border: `1px solid ${c.border}`,
             overflow: 'hidden',
           }}>
@@ -699,10 +605,10 @@ export default function SilverAgency() {
               borderBottom: `1px solid ${c.border}`,
             }}>
               <div style={{
-                padding: '1rem',
-                background: `${c.accent}15`,
-                fontWeight: 500,
-                fontSize: '0.8rem',
+                padding: '1.5rem',
+                background: `${c.accent}20`,
+                fontWeight: 600,
+                fontSize: '1.1rem',
                 color: c.accent,
                 textAlign: 'center',
                 borderRight: `1px solid ${c.border}`,
@@ -710,9 +616,9 @@ export default function SilverAgency() {
                 ✓ {t.whyUs.us}
               </div>
               <div style={{
-                padding: '1rem',
+                padding: '1.5rem',
                 fontWeight: 500,
-                fontSize: '0.8rem',
+                fontSize: '1.1rem',
                 color: c.textDim,
                 textAlign: 'center',
               }}>
@@ -726,23 +632,23 @@ export default function SilverAgency() {
                 borderBottom: i < t.whyUs.items.length - 1 ? `1px solid ${c.border}` : 'none',
               }}>
                 <div style={{
-                  padding: isMobile ? '0.9rem' : '1.1rem 1.5rem',
-                  fontSize: isMobile ? '0.8rem' : '0.9rem',
+                  padding: isMobile ? '1.2rem' : '1.5rem 2rem',
+                  fontSize: isMobile ? '1rem' : '1.1rem',
                   color: c.text,
                   borderRight: `1px solid ${c.border}`,
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.6rem',
+                  gap: '0.8rem',
                 }}>
                   <span style={{ color: c.accent }}>✓</span> {item.us}
                 </div>
                 <div style={{
-                  padding: isMobile ? '0.9rem' : '1.1rem 1.5rem',
-                  fontSize: isMobile ? '0.8rem' : '0.9rem',
+                  padding: isMobile ? '1.2rem' : '1.5rem 2rem',
+                  fontSize: isMobile ? '1rem' : '1.1rem',
                   color: c.textDim,
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.6rem',
+                  gap: '0.8rem',
                 }}>
                   <span style={{ color: '#e55' }}>✗</span> {item.others}
                 </div>
@@ -753,36 +659,35 @@ export default function SilverAgency() {
       </section>
 
       {/* Services */}
-      <section id="services" data-animate style={{
-        padding: isMobile ? '5rem 1.5rem' : '7rem 4rem',
-        ...fadeIn(visible.has('services')),
+      <section id="services" style={{
+        padding: isMobile ? '5rem 2rem' : '8rem 4rem',
       }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '0.8rem' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '1rem' }}>
               {t.services.overline}
             </div>
-            <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 300 }}>{t.services.title}</h2>
+            <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: 300 }}>{t.services.title}</h2>
           </div>
 
           <div style={{
             display: 'grid',
             gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
-            gap: '1rem',
+            gap: '1.5rem',
           }}>
             {t.services.items.map((s, i) => (
               <div key={i} style={{
                 background: c.bgCard,
-                borderRadius: '6px',
+                borderRadius: '12px',
                 border: `1px solid ${c.border}`,
-                padding: isMobile ? '1.5rem' : '2rem',
-                transition: 'border-color 0.2s ease',
+                padding: isMobile ? '2rem' : '2.5rem',
+                transition: 'border-color 0.2s',
               }}
-              onMouseOver={(e) => e.currentTarget.style.borderColor = c.accent + '50'}
+              onMouseOver={(e) => e.currentTarget.style.borderColor = c.accent}
               onMouseOut={(e) => e.currentTarget.style.borderColor = c.border}
               >
-                <h3 style={{ fontSize: '1rem', fontWeight: 500, marginBottom: '0.8rem', color: c.text }}>{s.name}</h3>
-                <p style={{ fontSize: '0.85rem', lineHeight: 1.7, color: c.textMuted }}>{s.desc}</p>
+                <h3 style={{ fontSize: '1.3rem', fontWeight: 500, marginBottom: '1rem', color: c.text }}>{s.name}</h3>
+                <p style={{ fontSize: '1.05rem', lineHeight: 1.7, color: c.textMuted }}>{s.desc}</p>
               </div>
             ))}
           </div>
@@ -790,34 +695,33 @@ export default function SilverAgency() {
       </section>
 
       {/* Calculator */}
-      <section id="calculator" data-animate style={{
-        padding: isMobile ? '5rem 1.5rem' : '7rem 4rem',
+      <section id="calculator" style={{
+        padding: isMobile ? '5rem 2rem' : '8rem 4rem',
         background: c.bgAlt,
-        ...fadeIn(visible.has('calculator')),
       }}>
-        <div style={{ maxWidth: '500px', margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '0.8rem' }}>
+        <div style={{ maxWidth: '550px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: '1rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '1rem' }}>
             {t.calculator.overline}
           </div>
-          <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 300, marginBottom: '2rem' }}>{t.calculator.title}</h2>
+          <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: 300, marginBottom: '2.5rem' }}>{t.calculator.title}</h2>
 
           <div style={{
             background: c.bgCard,
-            borderRadius: '8px',
+            borderRadius: '12px',
             border: `1px solid ${c.border}`,
-            padding: isMobile ? '2rem' : '2.5rem',
+            padding: isMobile ? '2rem' : '3rem',
           }}>
             <label style={{
               display: 'block',
-              fontSize: '0.75rem',
+              fontSize: '1rem',
               color: c.textMuted,
-              marginBottom: '0.8rem',
+              marginBottom: '1rem',
               textAlign: 'left',
             }}>
               {t.calculator.label}
             </label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1.5rem' }}>
-              <span style={{ color: c.textMuted }}>$</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+              <span style={{ color: c.textMuted, fontSize: '1.5rem' }}>$</span>
               <input
                 type="number"
                 value={calcValue}
@@ -827,9 +731,9 @@ export default function SilverAgency() {
                   flex: 1,
                   background: c.bg,
                   border: `1px solid ${c.border}`,
-                  borderRadius: '4px',
-                  padding: '0.9rem 1rem',
-                  fontSize: '1.2rem',
+                  borderRadius: '8px',
+                  padding: '1.2rem 1.5rem',
+                  fontSize: '1.5rem',
                   color: c.text,
                   outline: 'none',
                 }}
@@ -838,29 +742,29 @@ export default function SilverAgency() {
 
             {calcValue && parseInt(calcValue) > 0 && (
               <div style={{
-                background: `${c.accent}10`,
-                borderRadius: '6px',
-                padding: '1.5rem',
-                marginBottom: '1.5rem',
+                background: `${c.accent}15`,
+                borderRadius: '10px',
+                padding: '2rem',
+                marginBottom: '2rem',
               }}>
-                <div style={{ fontSize: '0.75rem', color: c.textMuted, marginBottom: '0.3rem' }}>{t.calculator.result}</div>
-                <div style={{ fontSize: '2.5rem', fontWeight: 300, color: c.accent }}>
+                <div style={{ fontSize: '1rem', color: c.textMuted, marginBottom: '0.5rem' }}>{t.calculator.result}</div>
+                <div style={{ fontSize: '3.5rem', fontWeight: 300, color: c.accent }}>
                   ${(parseInt(calcValue) * 3).toLocaleString()}
-                  <span style={{ fontSize: '1rem', color: c.textMuted }}>{t.calculator.month}</span>
+                  <span style={{ fontSize: '1.3rem', color: c.textMuted }}>{t.calculator.month}</span>
                 </div>
               </div>
             )}
 
-            <p style={{ fontSize: '0.7rem', color: c.textDim, marginBottom: '1.5rem' }}>{t.calculator.note}</p>
+            <p style={{ fontSize: '0.95rem', color: c.textDim, marginBottom: '2rem' }}>{t.calculator.note}</p>
 
             <a href="#apply" style={{
               display: 'inline-block',
               background: c.accent,
               color: c.bg,
-              padding: '0.9rem 2rem',
-              borderRadius: '4px',
+              padding: '1.2rem 3rem',
+              borderRadius: '8px',
               textDecoration: 'none',
-              fontSize: '0.85rem',
+              fontSize: '1.1rem',
               fontWeight: 500,
             }}>
               {t.calculator.cta}
@@ -870,47 +774,46 @@ export default function SilverAgency() {
       </section>
 
       {/* Process */}
-      <section id="process" data-animate style={{
-        padding: isMobile ? '5rem 1.5rem' : '7rem 4rem',
-        ...fadeIn(visible.has('process')),
+      <section id="process" style={{
+        padding: isMobile ? '5rem 2rem' : '8rem 4rem',
       }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '0.8rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '1rem' }}>
               {t.process.overline}
             </div>
-            <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 300 }}>{t.process.title}</h2>
+            <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: 300 }}>{t.process.title}</h2>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {t.process.steps.map((step, i) => (
               <div key={i} style={{
                 display: 'flex',
-                gap: isMobile ? '1.2rem' : '2rem',
+                gap: isMobile ? '1.5rem' : '2.5rem',
                 alignItems: 'flex-start',
-                padding: isMobile ? '1.5rem' : '2rem',
+                padding: isMobile ? '2rem' : '2.5rem',
                 background: c.bgCard,
-                borderRadius: '6px',
+                borderRadius: '12px',
                 border: `1px solid ${c.border}`,
               }}>
                 <div style={{
-                  width: '50px',
-                  height: '50px',
+                  width: '60px',
+                  height: '60px',
                   borderRadius: '50%',
-                  background: `${c.accent}20`,
+                  background: `${c.accent}25`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '1rem',
-                  fontWeight: 500,
+                  fontSize: '1.2rem',
+                  fontWeight: 600,
                   color: c.accent,
                   flexShrink: 0,
                 }}>
                   {step.num}
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 500, marginBottom: '0.5rem' }}>{step.title}</h3>
-                  <p style={{ fontSize: '0.9rem', lineHeight: 1.7, color: c.textMuted }}>{step.desc}</p>
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 500, marginBottom: '0.8rem' }}>{step.title}</h3>
+                  <p style={{ fontSize: '1.1rem', lineHeight: 1.7, color: c.textMuted }}>{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -919,32 +822,31 @@ export default function SilverAgency() {
       </section>
 
       {/* Team */}
-      <section id="team" data-animate style={{
-        padding: isMobile ? '5rem 1.5rem' : '7rem 4rem',
+      <section id="team" style={{
+        padding: isMobile ? '5rem 2rem' : '8rem 4rem',
         background: c.bgAlt,
-        ...fadeIn(visible.has('team')),
       }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <div style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '0.8rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '1rem' }}>
               {t.team.overline}
             </div>
-            <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 300 }}>{t.team.title}</h2>
+            <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: 300 }}>{t.team.title}</h2>
           </div>
 
           <div style={{
             display: 'grid',
             gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
-            gap: '0.8rem',
+            gap: '1rem',
           }}>
             {t.team.roles.map((role, i) => (
               <div key={i} style={{
                 background: c.bgCard,
-                borderRadius: '4px',
+                borderRadius: '8px',
                 border: `1px solid ${c.border}`,
-                padding: '1.2rem',
+                padding: '1.5rem',
                 textAlign: 'center',
-                fontSize: '0.85rem',
+                fontSize: '1.05rem',
                 color: c.textMuted,
               }}>
                 {role}
@@ -955,19 +857,18 @@ export default function SilverAgency() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" data-animate style={{
-        padding: isMobile ? '5rem 1.5rem' : '7rem 4rem',
-        ...fadeIn(visible.has('testimonials')),
+      <section id="testimonials" style={{
+        padding: isMobile ? '5rem 2rem' : '8rem 4rem',
       }}>
-        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '0.8rem' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '1rem' }}>
               {t.testimonials.overline}
             </div>
-            <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 300 }}>{t.testimonials.title}</h2>
+            <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: 300 }}>{t.testimonials.title}</h2>
           </div>
 
-          <div style={{ position: 'relative', minHeight: '320px' }}>
+          <div style={{ position: 'relative', minHeight: '380px' }}>
             {t.testimonials.items.map((item, i) => (
               <div key={i} style={{
                 position: i === 0 ? 'relative' : 'absolute',
@@ -975,60 +876,60 @@ export default function SilverAgency() {
                 left: 0,
                 right: 0,
                 opacity: activeTestimonial === i ? 1 : 0,
-                transform: activeTestimonial === i ? 'translateY(0)' : 'translateY(10px)',
+                transform: activeTestimonial === i ? 'translateY(0)' : 'translateY(15px)',
                 transition: 'all 0.5s ease',
                 pointerEvents: activeTestimonial === i ? 'auto' : 'none',
               }}>
                 <div style={{
                   background: c.bgCard,
-                  borderRadius: '8px',
+                  borderRadius: '16px',
                   border: `1px solid ${c.border}`,
-                  padding: isMobile ? '2rem' : '2.5rem',
+                  padding: isMobile ? '2.5rem' : '3rem',
                   textAlign: 'center',
                 }}>
                   <div style={{
                     display: 'inline-block',
-                    background: `${c.accent}20`,
-                    borderRadius: '20px',
-                    padding: '0.5rem 1.5rem',
-                    marginBottom: '1.5rem',
+                    background: `${c.accent}25`,
+                    borderRadius: '30px',
+                    padding: '0.8rem 2rem',
+                    marginBottom: '2rem',
                   }}>
-                    <span style={{ fontSize: '1.5rem', fontWeight: 500, color: c.accent }}>{item.amount}</span>
-                    <span style={{ fontSize: '0.85rem', color: c.textMuted }}>/mes</span>
+                    <span style={{ fontSize: '2rem', fontWeight: 500, color: c.accent }}>{item.amount}</span>
+                    <span style={{ fontSize: '1.1rem', color: c.textMuted }}>/mes</span>
                   </div>
 
                   <p style={{
-                    fontSize: isMobile ? '1rem' : '1.15rem',
+                    fontSize: isMobile ? '1.2rem' : '1.4rem',
                     lineHeight: 1.8,
                     color: c.text,
                     fontStyle: 'italic',
-                    marginBottom: '1.5rem',
+                    marginBottom: '2rem',
                   }}>
                     "{item.quote}"
                   </p>
 
                   <div>
-                    <div style={{ fontWeight: 500, color: c.text }}>{item.name}</div>
-                    <div style={{ fontSize: '0.8rem', color: c.textDim }}>{item.before}</div>
+                    <div style={{ fontSize: '1.2rem', fontWeight: 500, color: c.text }}>{item.name}</div>
+                    <div style={{ fontSize: '1rem', color: c.textDim, marginTop: '0.3rem' }}>{item.before}</div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.8rem', marginTop: '2rem' }}>
             {t.testimonials.items.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setActiveTestimonial(i)}
                 style={{
-                  width: activeTestimonial === i ? 24 : 8,
-                  height: 8,
-                  borderRadius: 4,
+                  width: activeTestimonial === i ? 32 : 12,
+                  height: 12,
+                  borderRadius: 6,
                   background: activeTestimonial === i ? c.accent : c.border,
                   border: 'none',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.3s',
                 }}
               />
             ))}
@@ -1037,14 +938,13 @@ export default function SilverAgency() {
       </section>
 
       {/* Benefits */}
-      <section id="benefits" data-animate style={{
-        padding: isMobile ? '5rem 1.5rem' : '7rem 4rem',
+      <section id="benefits" style={{
+        padding: isMobile ? '5rem 2rem' : '8rem 4rem',
         background: c.bgAlt,
-        ...fadeIn(visible.has('benefits')),
       }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <div style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '0.8rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent }}>
               {t.benefits.overline}
             </div>
           </div>
@@ -1052,21 +952,21 @@ export default function SilverAgency() {
           <div style={{
             display: 'grid',
             gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-            gap: '1rem',
+            gap: '1.5rem',
           }}>
             {t.benefits.items.map((b, i) => (
               <div key={i} style={{
                 display: 'flex',
-                gap: '1rem',
-                padding: '1.5rem',
+                gap: '1.2rem',
+                padding: '2rem',
                 background: c.bgCard,
-                borderRadius: '6px',
+                borderRadius: '12px',
                 border: `1px solid ${c.border}`,
               }}>
-                <span style={{ color: c.accent, fontSize: '1rem' }}>✓</span>
+                <span style={{ color: c.accent, fontSize: '1.3rem' }}>✓</span>
                 <div>
-                  <h4 style={{ fontSize: '0.95rem', fontWeight: 500, marginBottom: '0.3rem' }}>{b.title}</h4>
-                  <p style={{ fontSize: '0.85rem', color: c.textMuted }}>{b.desc}</p>
+                  <h4 style={{ fontSize: '1.2rem', fontWeight: 500, marginBottom: '0.5rem' }}>{b.title}</h4>
+                  <p style={{ fontSize: '1.05rem', color: c.textMuted }}>{b.desc}</p>
                 </div>
               </div>
             ))}
@@ -1075,32 +975,31 @@ export default function SilverAgency() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" data-animate style={{
-        padding: isMobile ? '5rem 1.5rem' : '7rem 4rem',
-        ...fadeIn(visible.has('faq')),
+      <section id="faq" style={{
+        padding: isMobile ? '5rem 2rem' : '8rem 4rem',
       }}>
-        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <div style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '0.8rem' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '1rem' }}>
               {t.faq.overline}
             </div>
-            <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.2rem', fontWeight: 300 }}>{t.faq.title}</h2>
+            <h2 style={{ fontSize: isMobile ? '2.2rem' : '3rem', fontWeight: 300 }}>{t.faq.title}</h2>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {t.faq.items.map((faq, i) => (
               <div key={i} style={{
                 background: c.bgCard,
-                borderRadius: '6px',
-                border: `1px solid ${activeFaq === i ? c.accent + '50' : c.border}`,
+                borderRadius: '12px',
+                border: `1px solid ${activeFaq === i ? c.accent : c.border}`,
                 overflow: 'hidden',
-                transition: 'border-color 0.2s ease',
+                transition: 'border-color 0.2s',
               }}>
                 <button
                   onClick={() => setActiveFaq(activeFaq === i ? null : i)}
                   style={{
                     width: '100%',
-                    padding: '1.2rem 1.5rem',
+                    padding: '1.5rem 2rem',
                     background: 'none',
                     border: 'none',
                     display: 'flex',
@@ -1110,22 +1009,22 @@ export default function SilverAgency() {
                     textAlign: 'left',
                   }}
                 >
-                  <span style={{ fontSize: '0.95rem', fontWeight: 500, color: c.text }}>{faq.q}</span>
+                  <span style={{ fontSize: '1.15rem', fontWeight: 500, color: c.text }}>{faq.q}</span>
                   <span style={{
                     color: c.accent,
-                    fontSize: '1.2rem',
+                    fontSize: '1.5rem',
                     transform: activeFaq === i ? 'rotate(45deg)' : 'rotate(0)',
-                    transition: 'transform 0.2s ease',
+                    transition: 'transform 0.2s',
                   }}>+</span>
                 </button>
                 <div style={{
-                  maxHeight: activeFaq === i ? '200px' : 0,
+                  maxHeight: activeFaq === i ? '250px' : 0,
                   overflow: 'hidden',
-                  transition: 'max-height 0.3s ease',
+                  transition: 'max-height 0.3s',
                 }}>
                   <p style={{
-                    padding: '0 1.5rem 1.2rem',
-                    fontSize: '0.9rem',
+                    padding: '0 2rem 1.5rem',
+                    fontSize: '1.1rem',
                     lineHeight: 1.7,
                     color: c.textMuted,
                   }}>{faq.a}</p>
@@ -1137,47 +1036,46 @@ export default function SilverAgency() {
       </section>
 
       {/* Apply */}
-      <section id="apply" data-animate style={{
-        padding: isMobile ? '5rem 1.5rem' : '7rem 4rem',
+      <section id="apply" style={{
+        padding: isMobile ? '5rem 2rem' : '8rem 4rem',
         background: c.bgAlt,
-        ...fadeIn(visible.has('apply')),
       }}>
         <div style={{
-          maxWidth: '900px',
+          maxWidth: '1000px',
           margin: '0 auto',
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-          gap: isMobile ? '2.5rem' : '4rem',
+          gap: isMobile ? '3rem' : '5rem',
           alignItems: 'center',
         }}>
           <div style={{ textAlign: isMobile ? 'center' : 'left' }}>
-            <div style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '0.8rem' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 500, letterSpacing: '0.2em', color: c.accent, marginBottom: '1rem' }}>
               {t.apply.overline}
             </div>
-            <h2 style={{ fontSize: isMobile ? '2rem' : '2.5rem', fontWeight: 300, marginBottom: '1rem' }}>
+            <h2 style={{ fontSize: isMobile ? '2.5rem' : '3.5rem', fontWeight: 300, marginBottom: '1.5rem' }}>
               {t.apply.title}
             </h2>
-            <p style={{ fontSize: '1rem', lineHeight: 1.8, color: c.textMuted, marginBottom: '1.5rem' }}>
+            <p style={{ fontSize: '1.2rem', lineHeight: 1.8, color: c.textMuted, marginBottom: '2rem' }}>
               {t.apply.subtitle}
             </p>
             <div style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.6rem',
-              padding: '0.8rem 1.2rem',
-              background: `${c.accent}10`,
-              borderRadius: '4px',
+              gap: '0.8rem',
+              padding: '1rem 1.5rem',
+              background: `${c.accent}15`,
+              borderRadius: '8px',
             }}>
-              <span style={{ color: c.accent }}>✓</span>
-              <span style={{ fontSize: '0.85rem', color: c.accent }}>{t.apply.guarantee}</span>
+              <span style={{ color: c.accent, fontSize: '1.2rem' }}>✓</span>
+              <span style={{ fontSize: '1.05rem', color: c.accent }}>{t.apply.guarantee}</span>
             </div>
           </div>
 
           <div style={{
             background: c.bgCard,
-            borderRadius: '8px',
+            borderRadius: '16px',
             border: `1px solid ${c.border}`,
-            padding: isMobile ? '2rem' : '2.5rem',
+            padding: isMobile ? '2rem' : '3rem',
             position: 'relative',
           }}>
             {formSubmitted && (
@@ -1185,31 +1083,31 @@ export default function SilverAgency() {
                 position: 'absolute',
                 inset: 0,
                 background: c.bgCard,
-                borderRadius: '8px',
+                borderRadius: '16px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '1rem',
+                gap: '1.5rem',
                 zIndex: 10,
               }}>
                 <div style={{
-                  width: 60,
-                  height: 60,
+                  width: 70,
+                  height: 70,
                   borderRadius: '50%',
                   background: c.accent,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '1.5rem',
+                  fontSize: '2rem',
                   color: c.bg,
                 }}>✓</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 500 }}>{t.apply.form.success}</div>
-                <div style={{ fontSize: '0.85rem', color: c.textMuted }}>{t.apply.form.successMsg}</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 500 }}>{t.apply.form.success}</div>
+                <div style={{ fontSize: '1.1rem', color: c.textMuted }}>{t.apply.form.successMsg}</div>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {[
                 { key: 'name' as const, label: t.apply.form.name },
                 { key: 'handle' as const, label: t.apply.form.handle },
@@ -1220,11 +1118,10 @@ export default function SilverAgency() {
                 <div key={field.key}>
                   <label style={{
                     display: 'block',
-                    fontSize: '0.7rem',
+                    fontSize: '0.95rem',
                     fontWeight: 500,
                     color: c.textMuted,
-                    marginBottom: '0.5rem',
-                    letterSpacing: '0.1em',
+                    marginBottom: '0.6rem',
                   }}>{field.label}</label>
                   <input
                     type="text"
@@ -1234,12 +1131,11 @@ export default function SilverAgency() {
                       width: '100%',
                       background: c.bg,
                       border: `1px solid ${c.border}`,
-                      borderRadius: '4px',
-                      padding: '0.9rem 1rem',
-                      fontSize: '0.95rem',
+                      borderRadius: '8px',
+                      padding: '1.1rem 1.2rem',
+                      fontSize: '1.1rem',
                       color: c.text,
                       outline: 'none',
-                      transition: 'border-color 0.2s ease',
                     }}
                     onFocus={(e) => e.currentTarget.style.borderColor = c.accent}
                     onBlur={(e) => e.currentTarget.style.borderColor = c.border}
@@ -1252,12 +1148,11 @@ export default function SilverAgency() {
                 background: c.accent,
                 color: c.bg,
                 border: 'none',
-                borderRadius: '4px',
-                padding: '1rem',
-                fontSize: '0.9rem',
+                borderRadius: '8px',
+                padding: '1.3rem',
+                fontSize: '1.1rem',
                 fontWeight: 500,
                 cursor: 'pointer',
-                transition: 'opacity 0.2s ease',
               }}>
                 {t.apply.form.submit}
               </button>
@@ -1268,30 +1163,29 @@ export default function SilverAgency() {
 
       {/* Footer */}
       <footer style={{
-        padding: isMobile ? '2.5rem 1.5rem' : '3rem 4rem',
+        padding: isMobile ? '3rem 2rem' : '4rem 4rem',
         borderTop: `1px solid ${c.border}`,
       }}>
         <div style={{
-          maxWidth: '900px',
+          maxWidth: '1000px',
           margin: '0 auto',
           display: 'flex',
           flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          gap: '1.5rem',
+          gap: '2rem',
         }}>
           <div style={{ textAlign: isMobile ? 'center' : 'left' }}>
-            <div style={{ fontSize: '1.1rem', fontWeight: 300, letterSpacing: '0.2em', marginBottom: '0.3rem' }}>SILVER</div>
-            <div style={{ fontSize: '0.75rem', color: c.textDim }}>{t.footer.tagline}</div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 300, letterSpacing: '0.2em', marginBottom: '0.5rem' }}>SILVER</div>
+            <div style={{ fontSize: '1rem', color: c.textDim }}>{t.footer.tagline}</div>
           </div>
 
-          <div style={{ display: 'flex', gap: '2rem' }}>
+          <div style={{ display: 'flex', gap: '2.5rem' }}>
             {['Telegram', 'Twitter', 'Instagram'].map((link) => (
               <a key={link} href="#" style={{
-                fontSize: '0.8rem',
+                fontSize: '1rem',
                 color: c.textDim,
                 textDecoration: 'none',
-                transition: 'color 0.2s ease',
               }}
               onMouseOver={(e) => e.currentTarget.style.color = c.text}
               onMouseOut={(e) => e.currentTarget.style.color = c.textDim}
@@ -1299,7 +1193,7 @@ export default function SilverAgency() {
             ))}
           </div>
 
-          <div style={{ fontSize: '0.7rem', color: c.textDim }}>
+          <div style={{ fontSize: '1rem', color: c.textDim }}>
             © 2025 · 18+
           </div>
         </div>
@@ -1308,24 +1202,20 @@ export default function SilverAgency() {
       {/* Floating Button */}
       <a href="#apply" style={{
         position: 'fixed',
-        bottom: isMobile ? '1.5rem' : '2rem',
-        right: isMobile ? '1.5rem' : '2rem',
-        width: 50,
-        height: 50,
+        bottom: isMobile ? '2rem' : '2.5rem',
+        right: isMobile ? '2rem' : '2.5rem',
+        width: 60,
+        height: 60,
         borderRadius: '50%',
         background: c.accent,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         textDecoration: 'none',
-        boxShadow: `0 4px 20px ${c.accent}40`,
+        boxShadow: `0 4px 25px ${c.accent}50`,
         zIndex: 90,
-        transition: 'transform 0.2s ease',
-      }}
-      onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-      onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={c.bg} strokeWidth="2.5">
+      }}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={c.bg} strokeWidth="2.5">
           <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" />
         </svg>
       </a>
