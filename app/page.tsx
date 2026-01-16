@@ -974,10 +974,8 @@ export default function LuxorAgencyPremium() {
         {/* Section Header */}
         <div style={{
           textAlign: 'center',
-          marginBottom: isMobile ? '4rem' : '6rem',
           maxWidth: '700px',
-          margin: '0 auto',
-          marginBottom: isMobile ? '4rem' : '6rem',
+          margin: `0 auto ${isMobile ? '4rem' : '6rem'}`,
         }}>
           <div style={{
             fontFamily: '"Raleway", sans-serif',
