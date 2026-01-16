@@ -418,18 +418,24 @@ export default function SilverAgency() {
         }
       `}</style>
 
-      {/* Animated GIF background */}
+      {/* Animated GIF background with blur */}
       <div style={{
         position: 'fixed',
         inset: 0,
         zIndex: 0,
         pointerEvents: 'none',
+        overflow: 'hidden',
       }}>
         <Image
           src="/images/bg-waves.gif"
           alt=""
           fill
-          style={{ objectFit: 'cover', opacity: 0.4 }}
+          style={{
+            objectFit: 'cover',
+            opacity: 0.5,
+            filter: 'blur(3px)',
+            transform: 'scale(1.05)',
+          }}
           unoptimized
           priority
         />
@@ -437,7 +443,7 @@ export default function SilverAgency() {
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: `linear-gradient(180deg, ${c.bg}90 0%, transparent 30%, transparent 70%, ${c.bg} 100%)`,
+          background: `linear-gradient(180deg, ${c.bg}95 0%, ${c.bg}40 20%, transparent 40%, transparent 60%, ${c.bg}40 80%, ${c.bg} 100%)`,
         }} />
       </div>
 
@@ -664,25 +670,61 @@ export default function SilverAgency() {
         </div>
       </section>
 
-      {/* Why Us */}
+      {/* Why Us - with distinct background */}
       <section id="whyus" style={{
-        padding: isMobile ? '4rem 1.5rem' : '6rem 3rem',
+        padding: isMobile ? '5rem 1.5rem 4rem' : '7rem 3rem 6rem',
         position: 'relative', zIndex: 1,
+        background: `linear-gradient(135deg, ${c.primary}15 0%, ${c.secondary}10 50%, ${c.accent}10 100%)`,
+        borderTop: `1px solid ${c.primary}30`,
+        borderBottom: `1px solid ${c.primary}30`,
       }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+        {/* Section background pattern */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `radial-gradient(${c.primary}20 1px, transparent 1px)`,
+          backgroundSize: '30px 30px',
+          opacity: 0.5,
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <div style={{
               display: 'inline-block', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.2em',
               color: c.primary, marginBottom: '0.8rem', padding: '0.4rem 1rem',
-              background: `${c.primary}20`, borderRadius: '30px',
+              background: `${c.primary}30`, borderRadius: '30px',
+              border: `1px solid ${c.primary}50`,
             }}>{t.whyUs.overline}</div>
             <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.5rem', fontWeight: 800 }}>{t.whyUs.title}</h2>
           </div>
 
-          <div style={{
-            background: c.bgCard, borderRadius: '20px', border: `1px solid ${c.border}`,
-            overflow: 'hidden', backdropFilter: 'blur(20px)',
-          }}>
+          {/* Comparison table with peeker */}
+          <div style={{ position: 'relative' }}>
+            {/* Pink peeker character */}
+            <div style={{
+              position: 'absolute',
+              top: isMobile ? '-60px' : '-80px',
+              left: isMobile ? '10px' : '30px',
+              width: isMobile ? '100px' : '140px',
+              height: isMobile ? '80px' : '110px',
+              zIndex: 20,
+              pointerEvents: 'none',
+            }}>
+              <Image
+                src="/images/peeker-pink.gif"
+                alt="Peeker"
+                fill
+                style={{ objectFit: 'contain' }}
+                unoptimized
+              />
+            </div>
+
+            <div style={{
+              background: `${c.bg}ee`, borderRadius: '20px', border: `1px solid ${c.primary}40`,
+              overflow: 'hidden', backdropFilter: 'blur(20px)',
+              boxShadow: `0 20px 60px ${c.primary}20`,
+            }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: `1px solid ${c.border}` }}>
               <div style={{
                 padding: '1.2rem', background: `${c.primary}20`, fontWeight: 700,
@@ -716,6 +758,7 @@ export default function SilverAgency() {
                 </div>
               </div>
             ))}
+            </div>
           </div>
         </div>
       </section>
