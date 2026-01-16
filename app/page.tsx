@@ -1,6 +1,192 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+
+// Translations
+const translations = {
+  es: {
+    nav: {
+      services: 'Servicios',
+      investment: 'Inversión',
+      apply: 'Aplicar',
+    },
+    hero: {
+      overline: 'GESTIÓN ELITE DE CREADORAS',
+      title1: 'Donde',
+      title2: 'las leyendas',
+      title3: 'se crean.',
+      subtitle: 'No gestionamos creadoras. Arquitectamos imperios. Para las pocas ambiciosas listas para dominar, no solo participar.',
+      cta: 'Comienza Tu Ascenso',
+      spots: 'Solo 3 lugares disponibles',
+      generated: 'Generados en 2024',
+    },
+    stats: {
+      generated: 'Generados',
+      creators: 'Creadoras',
+      retention: 'Retención',
+    },
+    services: {
+      overline: 'LO QUE HACEMOS',
+      title: 'Nuestro arte.',
+      subtitle: 'Cuatro pilares de excelencia. Una búsqueda implacable de grandeza.',
+      items: [
+        { id: '01', name: 'Arquitectura de Marca', desc: 'Construimos tu identidad digital en un imperio irresistible. Posicionamiento estratégico que captura atención y convierte admiradores en fans devotos.' },
+        { id: '02', name: 'Alquimia de Ingresos', desc: 'Transformamos engagement en riqueza. Nuestros sistemas probados multiplican tus ingresos a través de monetización y estrategias de pricing premium.' },
+        { id: '03', name: 'Dirección de Contenido', desc: 'Calidad cinematográfica con intención estratégica. Dirigimos contenido que detiene scrolls, despierta deseo y construye conexiones duraderas.' },
+        { id: '04', name: 'Ingeniería de Crecimiento', desc: 'Dominio algorítmico y psicología humana. Diseñamos momentos virales y crecimiento sostenible en cada plataforma que importa.' },
+      ],
+    },
+    investment: {
+      overline: 'MODELO DE PARTNERSHIP',
+      title1: 'Prosperamos',
+      title2: 'juntas.',
+      subtitle: 'Cero costos iniciales. Cero tarifas ocultas. Nuestro éxito está directamente ligado al tuyo — la máxima alineación de intereses.',
+      plans: [
+        { name: 'Ascendant', rate: '35%', desc: 'Gestión completa para estrellas en ascenso' },
+        { name: 'Sovereign', rate: '30%', desc: 'Para creadoras establecidas ($15k+/mes)' },
+        { name: 'Dynasty', rate: '25%', desc: 'Tier elite para top performers ($50k+)' },
+      ],
+    },
+    testimonials: {
+      overline: 'HISTORIAS DE ÉXITO',
+      items: [
+        { quote: "No solo hicieron crecer mi cuenta. Transformaron mi vida entera. De $3k a $89k mensuales en menos de 6 meses.", author: "TOP 0.1% CREADORA" },
+        { quote: "El equipo de Luxor entiende exactamente lo que funciona. Mi engagement se triplicó en el primer mes.", author: "INFLUENCER VERIFICADA" },
+        { quote: "Finalmente encontré un equipo que ve el potencial que yo veía. Los resultados hablan por sí solos.", author: "CONTENT CREATOR" },
+      ],
+    },
+    faq: {
+      overline: 'PREGUNTAS FRECUENTES',
+      title: 'Todo lo que necesitas saber.',
+      items: [
+        { q: "¿Cuánto tiempo toma ver resultados?", a: "La mayoría de nuestras creadoras ven mejoras significativas en las primeras 2-4 semanas. Resultados transformadores típicamente ocurren entre el mes 2 y 3." },
+        { q: "¿Qué plataformas manejan?", a: "Nos especializamos en todas las plataformas principales: OnlyFans, Fansly, Instagram, TikTok, Twitter/X, y más. Creamos estrategias cross-platform personalizadas." },
+        { q: "¿Cómo funciona el modelo de comisión?", a: "Sin costos iniciales. Solo ganamos cuando tú ganas. Nuestras comisiones van del 25% al 35% dependiendo del tier de servicio que elijas." },
+        { q: "¿Qué hace diferente a Luxor?", a: "No somos otra agencia genérica. Somos arquitectos de imperios. Cada estrategia es personalizada, cada decisión está basada en datos, y tu éxito es nuestra obsesión." },
+      ],
+    },
+    apply: {
+      overline: 'COMIENZA TU ASCENSO',
+      title1: '¿Lista para',
+      title2: 'trascender?',
+      subtitle: 'Aceptamos menos del 5% de aplicantes. Si estás seria sobre construir un legado, no solo un ingreso, deberíamos hablar.',
+      stats: [
+        { value: '200+', label: 'Creadoras activas' },
+        { value: '98%', label: 'Tasa de retención' },
+        { value: '3.2x', label: 'Crecimiento prom.' },
+      ],
+      form: {
+        handle: 'Tu handle',
+        handlePlaceholder: '@tuhandle',
+        platform: 'Plataforma',
+        platformPlaceholder: 'Instagram, TikTok, etc.',
+        following: 'Seguidores actuales',
+        followingPlaceholder: 'ej. 50k',
+        contact: 'Contacto',
+        contactPlaceholder: 'Telegram o email',
+        submit: 'Enviar Aplicación',
+        success: 'APLICACIÓN ENVIADA',
+        successMsg: 'Te contactaremos en las próximas 24 horas',
+        confidential: '100% confidencial',
+        response: 'Respuesta en 24h',
+      },
+    },
+    footer: {
+      tagline: 'Donde las leyendas son creadas',
+    },
+  },
+  en: {
+    nav: {
+      services: 'Services',
+      investment: 'Investment',
+      apply: 'Apply',
+    },
+    hero: {
+      overline: 'ELITE CREATOR MANAGEMENT',
+      title1: 'Where',
+      title2: 'legends',
+      title3: 'are made.',
+      subtitle: "We don't manage creators. We architect empires. For the ambitious few ready to dominate, not just participate.",
+      cta: 'Begin Your Ascent',
+      spots: 'Only 3 spots remaining',
+      generated: 'Generated in 2024',
+    },
+    stats: {
+      generated: 'Generated',
+      creators: 'Creators',
+      retention: 'Retention',
+    },
+    services: {
+      overline: 'WHAT WE DO',
+      title: 'Our craft.',
+      subtitle: 'Four pillars of excellence. One relentless pursuit of greatness.',
+      items: [
+        { id: '01', name: 'Brand Architecture', desc: 'We craft your digital identity into an irresistible empire. Strategic positioning that commands attention and converts admirers into devoted fans.' },
+        { id: '02', name: 'Revenue Alchemy', desc: 'Transform engagement into wealth. Our proven systems multiply your earnings through psychology-driven monetization and premium pricing strategies.' },
+        { id: '03', name: 'Content Direction', desc: 'Cinematic quality meets strategic intent. We direct content that stops scrolls, sparks desire, and builds lasting connections.' },
+        { id: '04', name: 'Growth Engineering', desc: 'Algorithmic mastery meets human psychology. We engineer viral moments and sustainable growth across every platform that matters.' },
+      ],
+    },
+    investment: {
+      overline: 'PARTNERSHIP MODEL',
+      title1: 'We prosper',
+      title2: 'together.',
+      subtitle: 'Zero upfront costs. Zero hidden fees. Our success is directly tied to yours — the ultimate alignment of interests.',
+      plans: [
+        { name: 'Ascendant', rate: '35%', desc: 'Full-service management for rising stars' },
+        { name: 'Sovereign', rate: '30%', desc: 'For established creators ($15k+/mo)' },
+        { name: 'Dynasty', rate: '25%', desc: 'Elite tier for top performers ($50k+)' },
+      ],
+    },
+    testimonials: {
+      overline: 'SUCCESS STORIES',
+      items: [
+        { quote: "They didn't just grow my account. They transformed my entire life. From $3k to $89k monthly in under 6 months.", author: "TOP 0.1% CREATOR" },
+        { quote: "The Luxor team understands exactly what works. My engagement tripled in the first month.", author: "VERIFIED INFLUENCER" },
+        { quote: "Finally found a team that sees the potential I saw. The results speak for themselves.", author: "CONTENT CREATOR" },
+      ],
+    },
+    faq: {
+      overline: 'FREQUENTLY ASKED QUESTIONS',
+      title: 'Everything you need to know.',
+      items: [
+        { q: "How long does it take to see results?", a: "Most of our creators see significant improvements in the first 2-4 weeks. Transformative results typically occur between month 2 and 3." },
+        { q: "What platforms do you manage?", a: "We specialize in all major platforms: OnlyFans, Fansly, Instagram, TikTok, Twitter/X, and more. We create personalized cross-platform strategies." },
+        { q: "How does the commission model work?", a: "No upfront costs. We only earn when you earn. Our commissions range from 25% to 35% depending on the service tier you choose." },
+        { q: "What makes Luxor different?", a: "We're not another generic agency. We're empire architects. Every strategy is personalized, every decision is data-driven, and your success is our obsession." },
+      ],
+    },
+    apply: {
+      overline: 'BEGIN YOUR ASCENT',
+      title1: 'Ready to',
+      title2: 'transcend?',
+      subtitle: "We accept fewer than 5% of applicants. If you're serious about building a legacy, not just an income, we should talk.",
+      stats: [
+        { value: '200+', label: 'Active creators' },
+        { value: '98%', label: 'Retention rate' },
+        { value: '3.2x', label: 'Avg growth' },
+      ],
+      form: {
+        handle: 'Social handle',
+        handlePlaceholder: '@yourhandle',
+        platform: 'Platform',
+        platformPlaceholder: 'Instagram, TikTok, etc.',
+        following: 'Current following',
+        followingPlaceholder: 'e.g. 50k',
+        contact: 'Contact',
+        contactPlaceholder: 'Telegram or email',
+        submit: 'Submit Application',
+        success: 'APPLICATION SENT',
+        successMsg: "We'll contact you within 24 hours",
+        confidential: '100% confidential',
+        response: 'Response in 24h',
+      },
+    },
+    footer: {
+      tagline: 'Where legends are made',
+    },
+  },
+};
 
 export default function LuxorAgencyPremium() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -17,11 +203,19 @@ export default function LuxorAgencyPremium() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
+  const [lang, setLang] = useState<'es' | 'en'>('es');
 
-  // Refs for scroll animations
-  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
+  const t = translations[lang];
 
   useEffect(() => {
+    // Detect language from browser
+    const browserLang = navigator.language.toLowerCase();
+    if (browserLang.startsWith('es')) {
+      setLang('es');
+    } else {
+      setLang('en');
+    }
+
     // Check mobile
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -47,14 +241,12 @@ export default function LuxorAgencyPremium() {
       { threshold: 0.1, rootMargin: '-50px' }
     );
 
-    // Observe all sections
     setTimeout(() => {
       document.querySelectorAll('section[id]').forEach((section) => {
         observer.observe(section);
       });
     }, 100);
 
-    // Auto-rotate testimonials
     const testimonialInterval = setInterval(() => {
       setActiveTestimonial((prev) => (prev + 1) % 3);
     }, 5000);
@@ -79,32 +271,13 @@ export default function LuxorAgencyPremium() {
     e.preventDefault();
     if (formData.handle && formData.platform && formData.contact) {
       setFormSubmitted(true);
-      // Reset after animation
       setTimeout(() => {
         setFormData({ handle: '', platform: '', following: '', contact: '' });
       }, 3000);
     }
   };
 
-  const services = [
-    { id: '01', name: 'Brand Architecture', desc: 'Construimos tu identidad digital en un imperio irresistible. Posicionamiento estratégico que captura atención y convierte admiradores en fans devotos.', icon: '◇' },
-    { id: '02', name: 'Revenue Alchemy', desc: 'Transformamos engagement en riqueza. Nuestros sistemas probados multiplican tus ingresos a través de monetización y estrategias de pricing premium.', icon: '◈' },
-    { id: '03', name: 'Content Direction', desc: 'Calidad cinematográfica con intención estratégica. Dirigimos contenido que detiene scrolls, despierta deseo y construye conexiones duraderas.', icon: '◆' },
-    { id: '04', name: 'Growth Engineering', desc: 'Dominio algorítmico y psicología humana. Diseñamos momentos virales y crecimiento sostenible en cada plataforma que importa.', icon: '◊' },
-  ];
-
-  const testimonials = [
-    { quote: "No solo hicieron crecer mi cuenta. Transformaron mi vida entera. De $3k a $89k mensuales en menos de 6 meses.", author: "TOP 0.1% CREATOR", avatar: "S" },
-    { quote: "El equipo de Luxor entiende exactamente lo que funciona. Mi engagement se triplicó en el primer mes.", author: "INFLUENCER VERIFICADA", avatar: "M" },
-    { quote: "Finalmente encontré un equipo que ve el potencial que yo veía. Los resultados hablan por sí solos.", author: "CONTENT CREATOR", avatar: "A" },
-  ];
-
-  const faqs = [
-    { q: "¿Cuánto tiempo toma ver resultados?", a: "La mayoría de nuestros creadores ven mejoras significativas en las primeras 2-4 semanas. Resultados transformadores típicamente ocurren entre el mes 2 y 3." },
-    { q: "¿Qué plataformas manejan?", a: "Nos especializamos en todas las plataformas principales: OnlyFans, Fansly, Instagram, TikTok, Twitter/X, y más. Creamos estrategias cross-platform personalizadas." },
-    { q: "¿Cómo funciona el modelo de comisión?", a: "Sin costos iniciales. Solo ganamos cuando tú ganas. Nuestras comisiones van del 25% al 35% dependiendo del tier de servicio que elijas." },
-    { q: "¿Qué hace diferente a Luxor?", a: "No somos otra agencia genérica. Somos arquitectos de imperios. Cada estrategia es personalizada, cada decisión está basada en datos, y tu éxito es nuestra obsesión." },
-  ];
+  const serviceIcons = ['◇', '◈', '◆', '◊'];
 
   const hexToRgba = (hex: string, alpha: number) => {
     const r = parseInt(hex.slice(1, 3), 16);
@@ -113,16 +286,29 @@ export default function LuxorAgencyPremium() {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
 
+  // NEW SENSUAL COLOR PALETTE - Rose Gold, Burgundy, Warm tones
   const c = {
-    black: '#050505',
-    blackWarm: '#0a0908',
-    gold: '#c6a355',
-    goldLight: '#e4c780',
-    goldPale: '#f5ecd7',
-    cream: '#faf8f3',
-    sand: '#d4c5a9',
-    bronze: '#8b7355',
-    charcoal: '#1a1918',
+    // Backgrounds
+    dark: '#1a1216',        // Warm dark burgundy-black
+    darker: '#120c0f',      // Deeper background
+    darkAlt: '#241a1e',     // Card backgrounds
+
+    // Primary accent - Rose Gold
+    rose: '#e8b4b8',        // Light rose
+    roseGold: '#c9a0a0',    // Rose gold
+    roseDark: '#a67c7c',    // Darker rose
+
+    // Secondary - Burgundy/Wine
+    burgundy: '#8b3a4c',    // Rich burgundy
+    wine: '#722f3e',        // Deep wine
+
+    // Text
+    cream: '#faf5f5',       // Warm cream
+    creamSoft: '#e8dede',   // Softer cream
+
+    // Accent
+    gold: '#d4a574',        // Warm gold
+    coral: '#e89b8c',       // Coral accent
   };
 
   const cursorSize = cursorVariant === 'hover' ? 100 : cursorVariant === 'text' ? 150 : 20;
@@ -139,7 +325,7 @@ export default function LuxorAgencyPremium() {
       <div style={{
         position: 'fixed',
         inset: 0,
-        background: c.black,
+        background: `linear-gradient(135deg, ${c.darker} 0%, ${c.dark} 100%)`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -148,7 +334,7 @@ export default function LuxorAgencyPremium() {
         zIndex: 10000,
       }}>
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap');
 
           @keyframes logoReveal {
             0% { opacity: 0; transform: translateY(30px); }
@@ -162,22 +348,26 @@ export default function LuxorAgencyPremium() {
             100% { transform: scaleX(1); }
           }
 
-          @keyframes fadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-          }
-
           @keyframes pulse {
             0%, 100% { opacity: 0.3; }
             50% { opacity: 1; }
           }
+
+          @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+          }
         `}</style>
 
         <div style={{
-          fontFamily: '"Bebas Neue", sans-serif',
+          fontFamily: '"Cormorant Garamond", serif',
           fontSize: 'clamp(3rem, 10vw, 6rem)',
+          fontWeight: 300,
           letterSpacing: '0.4em',
-          color: c.gold,
+          background: `linear-gradient(135deg, ${c.rose} 0%, ${c.roseGold} 50%, ${c.coral} 100%)`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
           animation: loaded ? 'logoReveal 1s ease forwards' : 'none',
           opacity: 0,
         }}>
@@ -187,19 +377,20 @@ export default function LuxorAgencyPremium() {
         <div style={{
           width: 200,
           height: 1,
-          background: `linear-gradient(90deg, transparent, ${c.gold}, transparent)`,
+          background: `linear-gradient(90deg, transparent, ${c.rose}, transparent)`,
           animation: loaded ? 'lineExpand 1s ease 0.3s forwards' : 'none',
           transform: 'scaleX(0)',
         }} />
 
         <div style={{
-          fontFamily: '"Space Mono", monospace',
+          fontFamily: '"Montserrat", sans-serif',
           fontSize: '0.6rem',
+          fontWeight: 400,
           letterSpacing: '0.4em',
-          color: hexToRgba(c.cream, 0.4),
+          color: hexToRgba(c.rose, 0.6),
           animation: 'pulse 1.5s ease infinite',
         }}>
-          LOADING EXCELLENCE
+          {lang === 'es' ? 'CARGANDO EXCELENCIA' : 'LOADING EXCELLENCE'}
         </div>
       </div>
     );
@@ -210,16 +401,16 @@ export default function LuxorAgencyPremium() {
       onMouseMove={handleMouseMove}
       style={{
         minHeight: '100vh',
-        background: c.black,
+        background: `linear-gradient(180deg, ${c.darker} 0%, ${c.dark} 50%, ${c.darker} 100%)`,
         color: c.cream,
-        fontFamily: '"EB Garamond", Garamond, serif',
+        fontFamily: '"Cormorant Garamond", serif',
         cursor: isMobile ? 'auto' : 'none',
         overflowX: 'hidden',
         position: 'relative',
       }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap');
 
         * {
           cursor: ${isMobile ? 'auto' : 'none'} !important;
@@ -231,12 +422,12 @@ export default function LuxorAgencyPremium() {
         }
 
         ::selection {
-          background: rgba(198, 163, 85, 0.4);
-          color: #faf8f3;
+          background: ${hexToRgba(c.rose, 0.4)};
+          color: ${c.cream};
         }
 
         input::placeholder, textarea::placeholder {
-          color: rgba(198, 163, 85, 0.3);
+          color: ${hexToRgba(c.rose, 0.4)};
           font-style: italic;
         }
 
@@ -255,34 +446,20 @@ export default function LuxorAgencyPremium() {
           to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes slideIn {
-          from { opacity: 0; transform: translateX(-30px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.9); }
-          to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes shimmer {
-          0% { background-position: -200% center; }
-          100% { background-position: 200% center; }
-        }
-
-        @keyframes rotate {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-
         @keyframes marquee {
           from { transform: translateX(0); }
           to { transform: translateX(-33.33%); }
         }
 
         @keyframes borderGlow {
-          0%, 100% { box-shadow: 0 0 20px rgba(198, 163, 85, 0.1); }
-          50% { box-shadow: 0 0 40px rgba(198, 163, 85, 0.3); }
+          0%, 100% { box-shadow: 0 0 20px ${hexToRgba(c.rose, 0.2)}; }
+          50% { box-shadow: 0 0 40px ${hexToRgba(c.rose, 0.4)}; }
+        }
+
+        @keyframes gradientMove {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
 
         .animate-in {
@@ -299,29 +476,24 @@ export default function LuxorAgencyPremium() {
         @media (max-width: 768px) {
           .hide-mobile { display: none !important; }
           .mobile-stack { flex-direction: column !important; }
-          .mobile-full { width: 100% !important; max-width: 100% !important; }
-          .mobile-padding { padding: 1.5rem !important; }
-          .mobile-text-center { text-align: center !important; }
-          .mobile-gap { gap: 2rem !important; }
         }
 
-        /* Scrollbar styling */
         ::-webkit-scrollbar {
           width: 8px;
         }
         ::-webkit-scrollbar-track {
-          background: ${c.black};
+          background: ${c.darker};
         }
         ::-webkit-scrollbar-thumb {
-          background: ${hexToRgba(c.gold, 0.3)};
+          background: ${hexToRgba(c.rose, 0.3)};
           border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-          background: ${hexToRgba(c.gold, 0.5)};
+          background: ${hexToRgba(c.rose, 0.5)};
         }
       `}</style>
 
-      {/* Custom Cursor - Desktop only */}
+      {/* Custom Cursor */}
       {!isMobile && (
         <>
           <div style={{
@@ -331,9 +503,9 @@ export default function LuxorAgencyPremium() {
             width: cursorSize,
             height: cursorSize,
             borderRadius: '50%',
-            border: `1px solid ${hexToRgba(c.gold, cursorVariant === 'default' ? 0.6 : 0.3)}`,
+            border: `1px solid ${hexToRgba(c.rose, cursorVariant === 'default' ? 0.6 : 0.3)}`,
             background: cursorVariant !== 'default'
-              ? `radial-gradient(circle, ${hexToRgba(c.gold, 0.1)} 0%, transparent 70%)`
+              ? `radial-gradient(circle, ${hexToRgba(c.rose, 0.15)} 0%, transparent 70%)`
               : 'transparent',
             pointerEvents: 'none',
             zIndex: 9999,
@@ -348,7 +520,7 @@ export default function LuxorAgencyPremium() {
             width: 6,
             height: 6,
             borderRadius: '50%',
-            background: c.gold,
+            background: c.rose,
             pointerEvents: 'none',
             zIndex: 10000,
             transform: 'translate(-50%, -50%)',
@@ -356,7 +528,7 @@ export default function LuxorAgencyPremium() {
         </>
       )}
 
-      {/* Ambient Background */}
+      {/* Ambient Background with warm gradients */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -364,9 +536,9 @@ export default function LuxorAgencyPremium() {
         right: 0,
         bottom: 0,
         background: `
-          radial-gradient(ellipse 80% 50% at 20% 20%, ${hexToRgba(c.gold, 0.04)} 0%, transparent 50%),
-          radial-gradient(ellipse 60% 40% at 80% 80%, ${hexToRgba(c.bronze, 0.03)} 0%, transparent 50%),
-          radial-gradient(ellipse 100% 100% at 50% 0%, ${hexToRgba(c.gold, 0.02)} 0%, transparent 40%)
+          radial-gradient(ellipse 80% 50% at 20% 20%, ${hexToRgba(c.burgundy, 0.15)} 0%, transparent 50%),
+          radial-gradient(ellipse 60% 40% at 80% 80%, ${hexToRgba(c.rose, 0.08)} 0%, transparent 50%),
+          radial-gradient(ellipse 100% 100% at 50% 0%, ${hexToRgba(c.wine, 0.1)} 0%, transparent 40%)
         `,
         pointerEvents: 'none',
       }} />
@@ -379,22 +551,22 @@ export default function LuxorAgencyPremium() {
         right: 0,
         bottom: 0,
         backgroundImage: `
-          linear-gradient(${hexToRgba(c.gold, 0.02)} 1px, transparent 1px),
-          linear-gradient(90deg, ${hexToRgba(c.gold, 0.02)} 1px, transparent 1px)
+          linear-gradient(${hexToRgba(c.rose, 0.03)} 1px, transparent 1px),
+          linear-gradient(90deg, ${hexToRgba(c.rose, 0.03)} 1px, transparent 1px)
         `,
         backgroundSize: '100px 100px',
         pointerEvents: 'none',
         opacity: 0.5,
       }} />
 
-      {/* Floating Geometric Elements - Desktop only */}
+      {/* Floating Geometric Elements */}
       <div className="hide-mobile" style={{
         position: 'fixed',
         top: '15%',
         right: '10%',
         width: 300,
         height: 300,
-        border: `1px solid ${hexToRgba(c.gold, 0.08)}`,
+        border: `1px solid ${hexToRgba(c.rose, 0.1)}`,
         transform: `rotate(45deg) translateY(${scrollY * 0.05}px)`,
         pointerEvents: 'none',
         animation: 'float 20s ease-in-out infinite',
@@ -405,14 +577,14 @@ export default function LuxorAgencyPremium() {
         left: '5%',
         width: 200,
         height: 200,
-        border: `1px solid ${hexToRgba(c.gold, 0.06)}`,
+        border: `1px solid ${hexToRgba(c.rose, 0.08)}`,
         borderRadius: '50%',
         transform: `translateY(${scrollY * -0.03}px)`,
         pointerEvents: 'none',
         animation: 'float 15s ease-in-out infinite reverse',
       }} />
 
-      {/* Navigation */}
+      {/* Navigation - IMPROVED VISIBILITY */}
       <nav style={{
         position: 'fixed',
         top: 0,
@@ -423,7 +595,7 @@ export default function LuxorAgencyPremium() {
         justifyContent: 'space-between',
         alignItems: 'center',
         zIndex: 100,
-        background: `linear-gradient(180deg, ${c.black} 0%, ${hexToRgba(c.black, 0.8)} 50%, transparent 100%)`,
+        background: `linear-gradient(180deg, ${c.darker} 0%, ${hexToRgba(c.darker, 0.95)} 50%, ${hexToRgba(c.darker, 0.8)} 80%, transparent 100%)`,
         backdropFilter: 'blur(20px)',
       }}>
         <div
@@ -431,41 +603,104 @@ export default function LuxorAgencyPremium() {
           onMouseLeave={() => setCursorVariant('default')}
           className="animate-in stagger-1"
           style={{
-            fontFamily: '"Bebas Neue", sans-serif',
-            fontSize: isMobile ? '1.4rem' : '1.8rem',
+            fontFamily: '"Cormorant Garamond", serif',
+            fontSize: isMobile ? '1.6rem' : '2rem',
+            fontWeight: 300,
             letterSpacing: '0.3em',
-            color: c.gold,
+            background: `linear-gradient(135deg, ${c.rose} 0%, ${c.coral} 100%)`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
           }}
         >
           LUXOR
         </div>
+
         <div style={{
           display: 'flex',
-          gap: isMobile ? '1.5rem' : '4rem',
-          fontFamily: '"Space Mono", monospace',
-          fontSize: isMobile ? '0.55rem' : '0.65rem',
-          letterSpacing: '0.15em',
-          textTransform: 'uppercase',
+          alignItems: 'center',
+          gap: isMobile ? '1rem' : '3rem',
         }}>
-          {['Services', 'Investment', 'Apply'].map((item, i) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
+          {/* Language Selector */}
+          <div style={{
+            display: 'flex',
+            gap: '0.5rem',
+            fontFamily: '"Montserrat", sans-serif',
+            fontSize: '0.6rem',
+          }}>
+            <button
+              onClick={() => setLang('es')}
               onMouseEnter={() => setCursorVariant('hover')}
               onMouseLeave={() => setCursorVariant('default')}
-              className={`animate-in stagger-${i + 2}`}
               style={{
-                color: hexToRgba(c.cream, 0.5),
-                textDecoration: 'none',
-                transition: 'color 0.4s ease',
-                position: 'relative',
+                background: lang === 'es' ? hexToRgba(c.rose, 0.2) : 'transparent',
+                border: `1px solid ${hexToRgba(c.rose, lang === 'es' ? 0.5 : 0.2)}`,
+                color: lang === 'es' ? c.rose : hexToRgba(c.cream, 0.5),
+                padding: '0.4rem 0.6rem',
+                borderRadius: '2px',
+                transition: 'all 0.3s ease',
+                fontWeight: 500,
               }}
-              onMouseOver={(e) => e.currentTarget.style.color = c.gold}
-              onMouseOut={(e) => e.currentTarget.style.color = hexToRgba(c.cream, 0.5)}
             >
-              {item}
-            </a>
-          ))}
+              ES
+            </button>
+            <button
+              onClick={() => setLang('en')}
+              onMouseEnter={() => setCursorVariant('hover')}
+              onMouseLeave={() => setCursorVariant('default')}
+              style={{
+                background: lang === 'en' ? hexToRgba(c.rose, 0.2) : 'transparent',
+                border: `1px solid ${hexToRgba(c.rose, lang === 'en' ? 0.5 : 0.2)}`,
+                color: lang === 'en' ? c.rose : hexToRgba(c.cream, 0.5),
+                padding: '0.4rem 0.6rem',
+                borderRadius: '2px',
+                transition: 'all 0.3s ease',
+                fontWeight: 500,
+              }}
+            >
+              EN
+            </button>
+          </div>
+
+          {/* Nav Links */}
+          <div style={{
+            display: 'flex',
+            gap: isMobile ? '1.5rem' : '3rem',
+            fontFamily: '"Montserrat", sans-serif',
+            fontSize: isMobile ? '0.6rem' : '0.7rem',
+            fontWeight: 500,
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+          }}>
+            {[
+              { key: 'services', label: t.nav.services },
+              { key: 'investment', label: t.nav.investment },
+              { key: 'apply', label: t.nav.apply },
+            ].map((item, i) => (
+              <a
+                key={item.key}
+                href={`#${item.key}`}
+                onMouseEnter={() => setCursorVariant('hover')}
+                onMouseLeave={() => setCursorVariant('default')}
+                className={`animate-in stagger-${i + 2}`}
+                style={{
+                  color: c.cream,
+                  textDecoration: 'none',
+                  transition: 'all 0.4s ease',
+                  position: 'relative',
+                  padding: '0.5rem 0',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.color = c.rose;
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.color = c.cream;
+                }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
         </div>
       </nav>
 
@@ -474,7 +709,7 @@ export default function LuxorAgencyPremium() {
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        padding: isMobile ? '6rem 1.5rem 4rem' : '0 4rem',
+        padding: isMobile ? '7rem 1.5rem 4rem' : '0 4rem',
         position: 'relative',
       }}>
         <div style={{
@@ -483,14 +718,14 @@ export default function LuxorAgencyPremium() {
           zIndex: 2,
           width: '100%',
         }}>
-          {/* Overline */}
           <div
             className="animate-in stagger-1"
             style={{
-              fontFamily: '"Space Mono", monospace',
+              fontFamily: '"Montserrat", sans-serif',
               fontSize: isMobile ? '0.5rem' : '0.6rem',
+              fontWeight: 500,
               letterSpacing: '0.5em',
-              color: c.gold,
+              color: c.rose,
               marginBottom: isMobile ? '2rem' : '3rem',
               display: 'flex',
               alignItems: 'center',
@@ -500,40 +735,40 @@ export default function LuxorAgencyPremium() {
             <span style={{
               width: isMobile ? 40 : 60,
               height: 1,
-              background: `linear-gradient(90deg, ${c.gold}, transparent)`,
+              background: `linear-gradient(90deg, ${c.rose}, transparent)`,
               display: 'block',
             }} />
-            ELITE CREATOR MANAGEMENT
+            {t.hero.overline}
           </div>
 
-          {/* Main Headline */}
           <h1 style={{
-            fontSize: isMobile ? 'clamp(3rem, 15vw, 5rem)' : 'clamp(4rem, 12vw, 10rem)',
-            fontWeight: 400,
-            lineHeight: 0.85,
+            fontSize: isMobile ? 'clamp(3rem, 15vw, 5rem)' : 'clamp(4rem, 12vw, 9rem)',
+            fontWeight: 300,
+            lineHeight: 0.9,
             margin: 0,
-            fontFamily: '"EB Garamond", serif',
           }}>
             <span
               className="animate-in stagger-2"
               style={{
                 display: 'block',
                 fontStyle: 'italic',
-                color: hexToRgba(c.cream, 0.9),
+                color: c.cream,
               }}
-            >Where</span>
+            >{t.hero.title1}</span>
             <span
               className="animate-in stagger-3"
               style={{
                 display: 'block',
                 marginLeft: isMobile ? '10%' : '15%',
-                fontWeight: 500,
-                background: `linear-gradient(135deg, ${c.goldLight} 0%, ${c.gold} 40%, ${c.bronze} 100%)`,
+                fontWeight: 400,
+                background: `linear-gradient(135deg, ${c.rose} 0%, ${c.coral} 50%, ${c.gold} 100%)`,
+                backgroundSize: '200% 200%',
+                animation: 'gradientMove 5s ease infinite',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
               }}
-            >legends</span>
+            >{t.hero.title2}</span>
             <span
               className="animate-in stagger-4"
               style={{
@@ -542,25 +777,23 @@ export default function LuxorAgencyPremium() {
                 fontStyle: 'italic',
                 color: hexToRgba(c.cream, 0.7),
               }}
-            >are made.</span>
+            >{t.hero.title3}</span>
           </h1>
 
-          {/* Subtext */}
           <p
             className="animate-in stagger-5"
             style={{
               marginTop: isMobile ? '3rem' : '5rem',
-              maxWidth: '420px',
-              fontSize: isMobile ? '1rem' : '1.15rem',
+              maxWidth: '450px',
+              fontSize: isMobile ? '1rem' : '1.2rem',
               lineHeight: 2,
-              color: hexToRgba(c.cream, 0.5),
-              fontWeight: 400,
+              color: hexToRgba(c.creamSoft, 0.7),
+              fontWeight: 300,
             }}
           >
-            No gestionamos creadores. Arquitectamos imperios. Para los pocos ambiciosos listos para dominar, no solo participar.
+            {t.hero.subtitle}
           </p>
 
-          {/* CTA */}
           <div
             className="animate-in stagger-6 mobile-stack"
             style={{
@@ -576,44 +809,44 @@ export default function LuxorAgencyPremium() {
               onMouseLeave={() => setCursorVariant('default')}
               style={{
                 padding: isMobile ? '1.2rem 2.5rem' : '1.5rem 3.5rem',
-                background: 'transparent',
-                color: c.gold,
+                background: `linear-gradient(135deg, ${c.rose} 0%, ${c.roseDark} 100%)`,
+                color: c.darker,
                 textDecoration: 'none',
                 fontSize: '0.7rem',
-                fontFamily: '"Space Mono", monospace',
+                fontFamily: '"Montserrat", sans-serif',
+                fontWeight: 600,
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
-                border: `1px solid ${c.gold}`,
+                border: 'none',
                 position: 'relative',
                 overflow: 'hidden',
-                transition: 'color 0.4s ease, background 0.4s ease, transform 0.3s ease',
+                transition: 'all 0.4s ease',
                 display: 'inline-block',
+                boxShadow: `0 10px 40px ${hexToRgba(c.rose, 0.3)}`,
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.background = c.gold;
-                e.currentTarget.style.color = c.black;
-                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.transform = 'translateY(-3px)';
+                e.currentTarget.style.boxShadow = `0 20px 60px ${hexToRgba(c.rose, 0.4)}`;
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = c.gold;
                 e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = `0 10px 40px ${hexToRgba(c.rose, 0.3)}`;
               }}
             >
-              Comienza Tu Ascenso
+              {t.hero.cta}
             </a>
             <span style={{
-              fontFamily: '"Space Mono", monospace',
+              fontFamily: '"Montserrat", sans-serif',
               fontSize: '0.55rem',
-              color: hexToRgba(c.cream, 0.25),
+              color: hexToRgba(c.rose, 0.6),
               letterSpacing: '0.1em',
             }}>
-              Solo 3 lugares disponibles
+              {t.hero.spots}
             </span>
           </div>
         </div>
 
-        {/* Hero Visual - Large ornate circle - Desktop only */}
+        {/* Hero Visual */}
         <div className="hide-mobile" style={{
           position: 'absolute',
           right: '-5%',
@@ -626,10 +859,10 @@ export default function LuxorAgencyPremium() {
         }}>
           <svg viewBox="0 0 400 400" style={{ width: '100%', height: '100%' }}>
             <defs>
-              <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={c.goldLight} stopOpacity="0.3" />
-                <stop offset="50%" stopColor={c.gold} stopOpacity="0.15" />
-                <stop offset="100%" stopColor={c.bronze} stopOpacity="0.05" />
+              <linearGradient id="roseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor={c.rose} stopOpacity="0.3" />
+                <stop offset="50%" stopColor={c.roseGold} stopOpacity="0.15" />
+                <stop offset="100%" stopColor={c.burgundy} stopOpacity="0.05" />
               </linearGradient>
               <filter id="glow">
                 <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
@@ -639,27 +872,22 @@ export default function LuxorAgencyPremium() {
                 </feMerge>
               </filter>
             </defs>
-            <circle cx="200" cy="200" r="180" fill="none" stroke={c.gold} strokeWidth="0.3" strokeOpacity="0.2" />
-            <circle cx="200" cy="200" r="170" fill="none" stroke={c.gold} strokeWidth="0.5" strokeOpacity="0.1" />
-            <circle cx="200" cy="200" r="140" fill="none" stroke={c.gold} strokeWidth="0.3" strokeOpacity="0.15" strokeDasharray="4 8" />
-            <circle cx="200" cy="200" r="100" fill="url(#goldGrad)" />
-            <circle cx="200" cy="200" r="100" fill="none" stroke={c.gold} strokeWidth="0.5" strokeOpacity="0.3" />
-            <polygon points="200,120 260,230 140,230" fill="none" stroke={c.gold} strokeWidth="0.5" strokeOpacity="0.4" />
-            <polygon points="200,140 240,210 160,210" fill={hexToRgba(c.gold, 0.05)} stroke={c.gold} strokeWidth="0.3" strokeOpacity="0.2" />
-            <ellipse cx="200" cy="175" rx="25" ry="12" fill="none" stroke={c.gold} strokeWidth="0.5" strokeOpacity="0.5" filter="url(#glow)" />
-            <circle cx="200" cy="175" r="6" fill={c.gold} fillOpacity="0.3" />
+            <circle cx="200" cy="200" r="180" fill="none" stroke={c.rose} strokeWidth="0.3" strokeOpacity="0.2" />
+            <circle cx="200" cy="200" r="170" fill="none" stroke={c.rose} strokeWidth="0.5" strokeOpacity="0.1" />
+            <circle cx="200" cy="200" r="140" fill="none" stroke={c.rose} strokeWidth="0.3" strokeOpacity="0.15" strokeDasharray="4 8" />
+            <circle cx="200" cy="200" r="100" fill="url(#roseGrad)" />
+            <circle cx="200" cy="200" r="100" fill="none" stroke={c.rose} strokeWidth="0.5" strokeOpacity="0.3" />
+            <polygon points="200,120 260,230 140,230" fill="none" stroke={c.rose} strokeWidth="0.5" strokeOpacity="0.4" />
+            <polygon points="200,140 240,210 160,210" fill={hexToRgba(c.rose, 0.05)} stroke={c.rose} strokeWidth="0.3" strokeOpacity="0.2" />
+            <ellipse cx="200" cy="175" rx="25" ry="12" fill="none" stroke={c.rose} strokeWidth="0.5" strokeOpacity="0.5" filter="url(#glow)" />
+            <circle cx="200" cy="175" r="6" fill={c.rose} fillOpacity="0.3" />
             {[0, 45, 90, 135, 180, 225, 270, 315].map(angle => (
               <line
                 key={angle}
                 x1="200" y1="20" x2="200" y2="40"
-                stroke={c.gold} strokeWidth="0.5" strokeOpacity="0.3"
+                stroke={c.rose} strokeWidth="0.5" strokeOpacity="0.3"
                 transform={`rotate(${angle} 200 200)`}
               />
-            ))}
-            {[0, 90, 180, 270].map(angle => (
-              <g key={angle} transform={`rotate(${angle} 200 200)`}>
-                <path d="M200,25 L210,35 L200,45 L190,35 Z" fill="none" stroke={c.gold} strokeWidth="0.3" strokeOpacity="0.4" />
-              </g>
             ))}
           </svg>
 
@@ -670,10 +898,39 @@ export default function LuxorAgencyPremium() {
             transform: 'translate(-50%, -50%)',
             width: '30%',
             height: '30%',
-            background: `radial-gradient(circle, ${hexToRgba(c.gold, 0.15)} 0%, transparent 70%)`,
+            background: `radial-gradient(circle, ${hexToRgba(c.rose, 0.2)} 0%, transparent 70%)`,
             filter: 'blur(40px)',
             animation: 'pulse 4s ease-in-out infinite',
           }} />
+        </div>
+
+        {/* Stats floating */}
+        <div className="hide-mobile" style={{
+          position: 'absolute',
+          bottom: '15%',
+          right: '8%',
+          textAlign: 'right',
+        }}>
+          <div style={{
+            fontFamily: '"Cormorant Garamond", serif',
+            fontSize: '5rem',
+            fontWeight: 300,
+            fontStyle: 'italic',
+            lineHeight: 1,
+            background: `linear-gradient(135deg, ${c.cream} 0%, ${c.rose} 100%)`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>$47M</div>
+          <div style={{
+            fontFamily: '"Montserrat", sans-serif',
+            fontSize: '0.5rem',
+            fontWeight: 500,
+            letterSpacing: '0.3em',
+            color: hexToRgba(c.rose, 0.7),
+            textTransform: 'uppercase',
+            marginTop: '0.5rem',
+          }}>{t.hero.generated}</div>
         </div>
 
         {/* Scroll indicator */}
@@ -688,44 +945,17 @@ export default function LuxorAgencyPremium() {
           <div style={{
             width: 1,
             height: 60,
-            background: `linear-gradient(180deg, ${c.gold}, transparent)`,
+            background: `linear-gradient(180deg, ${c.rose}, transparent)`,
           }} />
           <span style={{
-            fontFamily: '"Space Mono", monospace',
+            fontFamily: '"Montserrat", sans-serif',
             fontSize: '0.5rem',
+            fontWeight: 500,
             letterSpacing: '0.3em',
-            color: hexToRgba(c.cream, 0.3),
+            color: hexToRgba(c.rose, 0.5),
             textTransform: 'uppercase',
             writingMode: 'vertical-rl',
           }}>Scroll</span>
-        </div>
-
-        {/* Stats floating */}
-        <div className="hide-mobile" style={{
-          position: 'absolute',
-          bottom: '15%',
-          right: '8%',
-          textAlign: 'right',
-        }}>
-          <div style={{
-            fontFamily: '"EB Garamond", serif',
-            fontSize: '5rem',
-            fontWeight: 400,
-            fontStyle: 'italic',
-            lineHeight: 1,
-            background: `linear-gradient(135deg, ${c.cream} 0%, ${c.gold} 100%)`,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}>$47M</div>
-          <div style={{
-            fontFamily: '"Space Mono", monospace',
-            fontSize: '0.5rem',
-            letterSpacing: '0.3em',
-            color: hexToRgba(c.gold, 0.6),
-            textTransform: 'uppercase',
-            marginTop: '0.5rem',
-          }}>Generados en 2024</div>
         </div>
       </section>
 
@@ -736,25 +966,28 @@ export default function LuxorAgencyPremium() {
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '1rem',
-          borderTop: `1px solid ${hexToRgba(c.gold, 0.1)}`,
-          borderBottom: `1px solid ${hexToRgba(c.gold, 0.1)}`,
+          borderTop: `1px solid ${hexToRgba(c.rose, 0.15)}`,
+          borderBottom: `1px solid ${hexToRgba(c.rose, 0.15)}`,
+          background: hexToRgba(c.darkAlt, 0.5),
         }}>
           {[
-            { value: '$47M', label: 'Generados' },
-            { value: '200+', label: 'Creadores' },
-            { value: '98%', label: 'Retención' },
+            { value: '$47M', label: t.stats.generated },
+            { value: '200+', label: t.stats.creators },
+            { value: '98%', label: t.stats.retention },
           ].map((stat, i) => (
             <div key={i} style={{ textAlign: 'center' }}>
               <div style={{
-                fontFamily: '"EB Garamond", serif',
+                fontFamily: '"Cormorant Garamond", serif',
                 fontSize: '1.8rem',
+                fontWeight: 300,
                 fontStyle: 'italic',
-                color: c.gold,
+                color: c.rose,
               }}>{stat.value}</div>
               <div style={{
-                fontFamily: '"Space Mono", monospace',
+                fontFamily: '"Montserrat", sans-serif',
                 fontSize: '0.45rem',
-                color: hexToRgba(c.cream, 0.4),
+                fontWeight: 500,
+                color: hexToRgba(c.cream, 0.5),
                 letterSpacing: '0.1em',
                 marginTop: '0.3rem',
               }}>{stat.label}</div>
@@ -766,10 +999,11 @@ export default function LuxorAgencyPremium() {
       {/* Marquee Section */}
       <section style={{
         padding: isMobile ? '4rem 0' : '6rem 0',
-        borderTop: `1px solid ${hexToRgba(c.gold, 0.1)}`,
-        borderBottom: `1px solid ${hexToRgba(c.gold, 0.1)}`,
+        borderTop: `1px solid ${hexToRgba(c.rose, 0.1)}`,
+        borderBottom: `1px solid ${hexToRgba(c.rose, 0.1)}`,
         overflow: 'hidden',
         position: 'relative',
+        background: hexToRgba(c.darkAlt, 0.3),
       }}>
         <div style={{
           display: 'flex',
@@ -779,14 +1013,15 @@ export default function LuxorAgencyPremium() {
         }}>
           {[...Array(3)].map((_, i) => (
             <div key={i} style={{ display: 'flex', gap: isMobile ? '3rem' : '6rem' }}>
-              {['Strategy', '\u25C6', 'Growth', '\u25C6', 'Revenue', '\u25C6', 'Excellence', '\u25C6', 'Legacy', '\u25C6'].map((text, j) => (
+              {['Strategy', '\u2726', 'Growth', '\u2726', 'Revenue', '\u2726', 'Excellence', '\u2726', 'Legacy', '\u2726'].map((text, j) => (
                 <span
                   key={j}
                   style={{
-                    fontFamily: text === '\u25C6' ? 'serif' : '"Bebas Neue", sans-serif',
-                    fontSize: text === '\u25C6' ? '1rem' : (isMobile ? '2rem' : '3rem'),
-                    letterSpacing: text === '\u25C6' ? 0 : '0.2em',
-                    color: text === '\u25C6' ? c.gold : hexToRgba(c.cream, 0.15),
+                    fontFamily: '"Cormorant Garamond", serif',
+                    fontSize: text === '\u2726' ? '1.5rem' : (isMobile ? '2rem' : '3.5rem'),
+                    fontWeight: 300,
+                    letterSpacing: text === '\u2726' ? 0 : '0.15em',
+                    color: text === '\u2726' ? c.rose : hexToRgba(c.cream, 0.15),
                   }}
                 >
                   {text}
@@ -816,38 +1051,41 @@ export default function LuxorAgencyPremium() {
         }}>
           <div>
             <div style={{
-              fontFamily: '"Space Mono", monospace',
+              fontFamily: '"Montserrat", sans-serif',
               fontSize: '0.55rem',
+              fontWeight: 500,
               letterSpacing: '0.4em',
-              color: c.gold,
+              color: c.rose,
               marginBottom: '2rem',
               display: 'flex',
               alignItems: 'center',
               gap: '1rem',
             }}>
-              <span style={{ width: 40, height: 1, background: c.gold }} />
-              LO QUE HACEMOS
+              <span style={{ width: 40, height: 1, background: c.rose }} />
+              {t.services.overline}
             </div>
             <h2 style={{
               fontSize: isMobile ? 'clamp(2.5rem, 10vw, 4rem)' : 'clamp(3rem, 8vw, 6rem)',
-              fontWeight: 400,
+              fontWeight: 300,
               fontStyle: 'italic',
               margin: 0,
               lineHeight: 1,
+              color: c.cream,
             }}>
-              Nuestro arte.
+              {t.services.title}
             </h2>
           </div>
           <p className="hide-mobile" style={{
             maxWidth: 350,
-            fontSize: '0.95rem',
+            fontSize: '1rem',
             lineHeight: 2,
-            color: hexToRgba(c.cream, 0.4),
+            color: hexToRgba(c.creamSoft, 0.5),
             textAlign: 'right',
             paddingTop: '3rem',
+            fontWeight: 300,
           }}>
-            Cuatro pilares de excelencia.<br />
-            Una búsqueda implacable de grandeza.
+            {t.services.subtitle.split('.')[0]}.<br />
+            {t.services.subtitle.split('.')[1]}.
           </p>
         </div>
 
@@ -855,9 +1093,9 @@ export default function LuxorAgencyPremium() {
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
           gap: '1px',
-          background: hexToRgba(c.gold, 0.1),
+          background: hexToRgba(c.rose, 0.15),
         }}>
-          {services.map((service, i) => (
+          {t.services.items.map((service, i) => (
             <div
               key={service.id}
               onMouseEnter={() => {
@@ -869,7 +1107,7 @@ export default function LuxorAgencyPremium() {
                 setCursorVariant('default');
               }}
               style={{
-                background: c.black,
+                background: c.dark,
                 padding: isMobile ? '2.5rem' : '4rem',
                 minHeight: isMobile ? 250 : 350,
                 display: 'flex',
@@ -886,23 +1124,24 @@ export default function LuxorAgencyPremium() {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: `radial-gradient(circle at ${i % 2 === 0 ? '0% 100%' : '100% 100%'}, ${hexToRgba(c.gold, 0.08)} 0%, transparent 60%)`,
+                background: `radial-gradient(circle at ${i % 2 === 0 ? '0% 100%' : '100% 100%'}, ${hexToRgba(c.rose, 0.1)} 0%, transparent 60%)`,
                 opacity: activeService === service.id ? 1 : 0,
                 transition: 'opacity 0.6s ease',
               }} />
 
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <span style={{
-                  fontFamily: '"Space Mono", monospace',
+                  fontFamily: '"Montserrat", sans-serif',
                   fontSize: '0.6rem',
-                  color: c.gold,
+                  fontWeight: 500,
+                  color: c.rose,
                   opacity: 0.5,
                 }}>{service.id}</span>
                 <span style={{
                   fontSize: '1.5rem',
-                  color: activeService === service.id ? c.gold : hexToRgba(c.gold, 0.3),
+                  color: activeService === service.id ? c.rose : hexToRgba(c.rose, 0.3),
                   transition: 'color 0.4s ease',
-                }}>{service.icon}</span>
+                }}>{serviceIcons[i]}</span>
               </div>
 
               <div style={{ position: 'relative', zIndex: 1 }}>
@@ -912,15 +1151,16 @@ export default function LuxorAgencyPremium() {
                   margin: '0 0 1.5rem 0',
                   fontStyle: 'italic',
                   transition: 'color 0.4s ease',
-                  color: activeService === service.id ? c.gold : c.cream,
+                  color: activeService === service.id ? c.rose : c.cream,
                 }}>{service.name}</h3>
                 <p style={{
-                  fontSize: isMobile ? '0.85rem' : '0.9rem',
+                  fontSize: isMobile ? '0.9rem' : '1rem',
                   lineHeight: 1.9,
-                  color: hexToRgba(c.cream, 0.45),
+                  color: hexToRgba(c.creamSoft, 0.5),
                   maxWidth: 400,
+                  fontWeight: 300,
                   transition: 'opacity 0.6s ease, transform 0.6s ease',
-                  opacity: activeService === service.id || isMobile ? 1 : 0.6,
+                  opacity: activeService === service.id || isMobile ? 1 : 0.7,
                   transform: activeService === service.id ? 'translateY(0)' : 'translateY(10px)',
                 }}>{service.desc}</p>
               </div>
@@ -931,7 +1171,7 @@ export default function LuxorAgencyPremium() {
                 right: '2rem',
                 width: 40,
                 height: 40,
-                border: `1px solid ${hexToRgba(c.gold, activeService === service.id ? 0.4 : 0.1)}`,
+                border: `1px solid ${hexToRgba(c.rose, activeService === service.id ? 0.4 : 0.1)}`,
                 transition: 'border-color 0.4s ease, transform 0.4s ease',
                 transform: activeService === service.id ? 'rotate(45deg) scale(1.1)' : 'rotate(45deg)',
               }} />
@@ -945,7 +1185,7 @@ export default function LuxorAgencyPremium() {
         id="investment"
         style={{
           padding: isMobile ? '6rem 1.5rem' : '12rem 4rem',
-          background: `linear-gradient(180deg, transparent 0%, ${hexToRgba(c.gold, 0.02)} 50%, transparent 100%)`,
+          background: `linear-gradient(180deg, transparent 0%, ${hexToRgba(c.burgundy, 0.05)} 50%, transparent 100%)`,
           position: 'relative',
           ...sectionStyle('investment'),
         }}
@@ -955,9 +1195,10 @@ export default function LuxorAgencyPremium() {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          fontFamily: '"Bebas Neue", sans-serif',
+          fontFamily: '"Cormorant Garamond", serif',
           fontSize: 'clamp(15rem, 40vw, 35rem)',
-          color: hexToRgba(c.gold, 0.03),
+          fontWeight: 300,
+          color: hexToRgba(c.rose, 0.03),
           letterSpacing: '0.1em',
           pointerEvents: 'none',
           whiteSpace: 'nowrap',
@@ -975,50 +1216,48 @@ export default function LuxorAgencyPremium() {
         }}>
           <div>
             <div style={{
-              fontFamily: '"Space Mono", monospace',
+              fontFamily: '"Montserrat", sans-serif',
               fontSize: '0.55rem',
+              fontWeight: 500,
               letterSpacing: '0.4em',
-              color: c.gold,
+              color: c.rose,
               marginBottom: '2rem',
             }}>
-              MODELO DE PARTNERSHIP
+              {t.investment.overline}
             </div>
             <h2 style={{
               fontSize: isMobile ? 'clamp(2.5rem, 10vw, 4rem)' : 'clamp(3rem, 7vw, 5rem)',
-              fontWeight: 400,
+              fontWeight: 300,
               margin: 0,
               lineHeight: 1.1,
             }}>
-              <span style={{ display: 'block', fontStyle: 'italic', color: hexToRgba(c.cream, 0.6) }}>
-                Prosperamos
+              <span style={{ display: 'block', fontStyle: 'italic', color: hexToRgba(c.cream, 0.7) }}>
+                {t.investment.title1}
               </span>
               <span style={{
                 display: 'block',
-                background: `linear-gradient(90deg, ${c.goldLight}, ${c.gold})`,
+                background: `linear-gradient(90deg, ${c.rose}, ${c.coral})`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
               }}>
-                juntos.
+                {t.investment.title2}
               </span>
             </h2>
             <p style={{
               marginTop: '2rem',
-              fontSize: isMobile ? '0.9rem' : '1rem',
+              fontSize: isMobile ? '0.95rem' : '1.1rem',
               lineHeight: 2.2,
-              color: hexToRgba(c.cream, 0.4),
+              color: hexToRgba(c.creamSoft, 0.5),
               maxWidth: 380,
+              fontWeight: 300,
             }}>
-              Cero costos iniciales. Cero tarifas ocultas. Nuestro éxito está directamente ligado al tuyo — la máxima alineación de intereses.
+              {t.investment.subtitle}
             </p>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            {[
-              { name: 'Ascendant', rate: '35%', desc: 'Gestión completa para estrellas en ascenso', features: ['Chat 24/7', 'Estrategia de contenido', 'Crecimiento social'] },
-              { name: 'Sovereign', rate: '30%', desc: 'Para creadores establecidos ($15k+/mes)', features: ['Soporte prioritario', 'Analytics avanzados', 'Brand partnerships'] },
-              { name: 'Dynasty', rate: '25%', desc: 'Tier elite para top performers ($50k+)', features: ['Equipo dedicado', 'Estrategias custom', 'Experiencias VIP'] },
-            ].map((plan, i) => (
+            {t.investment.plans.map((plan, i) => (
               <div
                 key={i}
                 onMouseEnter={() => {
@@ -1032,9 +1271,9 @@ export default function LuxorAgencyPremium() {
                 style={{
                   padding: isMobile ? '2rem' : '3rem',
                   background: activePlan === i
-                    ? `linear-gradient(135deg, ${hexToRgba(c.gold, 0.12)} 0%, ${hexToRgba(c.bronze, 0.05)} 100%)`
-                    : hexToRgba(c.charcoal, 0.5),
-                  border: `1px solid ${hexToRgba(c.gold, activePlan === i ? 0.3 : 0.08)}`,
+                    ? `linear-gradient(135deg, ${hexToRgba(c.rose, 0.15)} 0%, ${hexToRgba(c.burgundy, 0.08)} 100%)`
+                    : hexToRgba(c.darkAlt, 0.5),
+                  border: `1px solid ${hexToRgba(c.rose, activePlan === i ? 0.35 : 0.1)}`,
                   display: 'grid',
                   gridTemplateColumns: '1fr auto',
                   alignItems: 'center',
@@ -1045,25 +1284,28 @@ export default function LuxorAgencyPremium() {
               >
                 <div>
                   <div style={{
-                    fontFamily: '"Bebas Neue", sans-serif',
-                    fontSize: isMobile ? '1.2rem' : '1.4rem',
-                    letterSpacing: '0.15em',
-                    color: activePlan === i ? c.gold : c.cream,
+                    fontFamily: '"Cormorant Garamond", serif',
+                    fontSize: isMobile ? '1.4rem' : '1.6rem',
+                    fontWeight: 400,
+                    letterSpacing: '0.1em',
+                    color: activePlan === i ? c.rose : c.cream,
                     transition: 'color 0.4s ease',
                   }}>{plan.name}</div>
                   <div style={{
-                    fontFamily: '"Space Mono", monospace',
-                    fontSize: '0.5rem',
-                    color: hexToRgba(c.cream, 0.35),
+                    fontFamily: '"Montserrat", sans-serif',
+                    fontSize: '0.55rem',
+                    fontWeight: 400,
+                    color: hexToRgba(c.creamSoft, 0.4),
                     marginTop: '0.5rem',
                     letterSpacing: '0.05em',
                   }}>{plan.desc}</div>
                 </div>
                 <div style={{
-                  fontFamily: '"EB Garamond", serif',
+                  fontFamily: '"Cormorant Garamond", serif',
                   fontSize: isMobile ? '2.5rem' : '3.5rem',
+                  fontWeight: 300,
                   fontStyle: 'italic',
-                  background: `linear-gradient(135deg, ${c.goldLight}, ${c.gold})`,
+                  background: `linear-gradient(135deg, ${c.rose}, ${c.coral})`,
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
@@ -1081,26 +1323,28 @@ export default function LuxorAgencyPremium() {
           padding: isMobile ? '6rem 1.5rem' : '10rem 4rem',
           textAlign: 'center',
           position: 'relative',
+          background: hexToRgba(c.darkAlt, 0.3),
           ...sectionStyle('testimonials'),
         }}
       >
         <div style={{
-          fontFamily: '"Space Mono", monospace',
+          fontFamily: '"Montserrat", sans-serif',
           fontSize: '0.55rem',
+          fontWeight: 500,
           letterSpacing: '0.4em',
-          color: c.gold,
+          color: c.rose,
           marginBottom: '3rem',
         }}>
-          HISTORIAS DE ÉXITO
+          {t.testimonials.overline}
         </div>
 
         <div style={{
           maxWidth: 800,
           margin: '0 auto',
           position: 'relative',
-          minHeight: 250,
+          minHeight: 280,
         }}>
-          {testimonials.map((testimonial, i) => (
+          {t.testimonials.items.map((testimonial, i) => (
             <div
               key={i}
               style={{
@@ -1115,34 +1359,36 @@ export default function LuxorAgencyPremium() {
               }}
             >
               <div style={{
-                width: 60,
-                height: 60,
+                width: 70,
+                height: 70,
                 borderRadius: '50%',
-                background: `linear-gradient(135deg, ${c.gold}, ${c.bronze})`,
+                background: `linear-gradient(135deg, ${c.rose}, ${c.burgundy})`,
                 margin: '0 auto 2rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontFamily: '"Bebas Neue", sans-serif',
-                fontSize: '1.5rem',
-                color: c.black,
+                fontFamily: '"Cormorant Garamond", serif',
+                fontSize: '1.8rem',
+                fontWeight: 300,
+                color: c.cream,
               }}>
-                {testimonial.avatar}
+                {['S', 'M', 'A'][i]}
               </div>
 
               <div style={{
-                fontFamily: '"EB Garamond", serif',
+                fontFamily: '"Cormorant Garamond", serif',
                 fontSize: '4rem',
-                color: hexToRgba(c.gold, 0.2),
+                color: hexToRgba(c.rose, 0.25),
                 marginBottom: '-1rem',
               }}>&ldquo;</div>
 
               <blockquote style={{
-                fontFamily: '"EB Garamond", serif',
-                fontSize: isMobile ? 'clamp(1.2rem, 5vw, 1.8rem)' : 'clamp(1.5rem, 4vw, 2.5rem)',
+                fontFamily: '"Cormorant Garamond", serif',
+                fontSize: isMobile ? 'clamp(1.2rem, 5vw, 1.8rem)' : 'clamp(1.5rem, 4vw, 2.2rem)',
                 fontStyle: 'italic',
-                lineHeight: 1.7,
-                color: hexToRgba(c.cream, 0.8),
+                fontWeight: 300,
+                lineHeight: 1.8,
+                color: hexToRgba(c.cream, 0.85),
                 margin: 0,
               }}>
                 {testimonial.quote}
@@ -1150,10 +1396,11 @@ export default function LuxorAgencyPremium() {
 
               <div style={{
                 marginTop: '2rem',
-                fontFamily: '"Space Mono", monospace',
+                fontFamily: '"Montserrat", sans-serif',
                 fontSize: '0.6rem',
+                fontWeight: 500,
                 letterSpacing: '0.3em',
-                color: c.gold,
+                color: c.rose,
               }}>
                 — {testimonial.author}
               </div>
@@ -1161,14 +1408,13 @@ export default function LuxorAgencyPremium() {
           ))}
         </div>
 
-        {/* Testimonial indicators */}
         <div style={{
           display: 'flex',
           justifyContent: 'center',
           gap: '1rem',
           marginTop: '3rem',
         }}>
-          {testimonials.map((_, i) => (
+          {t.testimonials.items.map((_, i) => (
             <button
               key={i}
               onClick={() => setActiveTestimonial(i)}
@@ -1178,7 +1424,7 @@ export default function LuxorAgencyPremium() {
                 width: activeTestimonial === i ? 40 : 12,
                 height: 12,
                 borderRadius: 6,
-                background: activeTestimonial === i ? c.gold : hexToRgba(c.gold, 0.2),
+                background: activeTestimonial === i ? c.rose : hexToRgba(c.rose, 0.25),
                 border: 'none',
                 transition: 'all 0.4s ease',
                 padding: 0,
@@ -1206,30 +1452,32 @@ export default function LuxorAgencyPremium() {
             marginBottom: '4rem',
           }}>
             <div style={{
-              fontFamily: '"Space Mono", monospace',
+              fontFamily: '"Montserrat", sans-serif',
               fontSize: '0.55rem',
+              fontWeight: 500,
               letterSpacing: '0.4em',
-              color: c.gold,
+              color: c.rose,
               marginBottom: '2rem',
             }}>
-              PREGUNTAS FRECUENTES
+              {t.faq.overline}
             </div>
             <h2 style={{
               fontSize: isMobile ? 'clamp(2rem, 8vw, 3rem)' : 'clamp(2.5rem, 6vw, 4rem)',
-              fontWeight: 400,
+              fontWeight: 300,
               fontStyle: 'italic',
               margin: 0,
+              color: c.cream,
             }}>
-              Todo lo que necesitas saber.
+              {t.faq.title}
             </h2>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: hexToRgba(c.gold, 0.1) }}>
-            {faqs.map((faq, i) => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: hexToRgba(c.rose, 0.1) }}>
+            {t.faq.items.map((faq, i) => (
               <div
                 key={i}
                 style={{
-                  background: c.black,
+                  background: c.dark,
                   overflow: 'hidden',
                 }}
               >
@@ -1250,16 +1498,17 @@ export default function LuxorAgencyPremium() {
                   }}
                 >
                   <span style={{
-                    fontFamily: '"EB Garamond", serif',
-                    fontSize: isMobile ? '1rem' : '1.2rem',
-                    color: activeFaq === i ? c.gold : c.cream,
+                    fontFamily: '"Cormorant Garamond", serif',
+                    fontSize: isMobile ? '1.1rem' : '1.3rem',
+                    fontWeight: 400,
+                    color: activeFaq === i ? c.rose : c.cream,
                     transition: 'color 0.3s ease',
                   }}>
                     {faq.q}
                   </span>
                   <span style={{
                     fontSize: '1.5rem',
-                    color: c.gold,
+                    color: c.rose,
                     transform: activeFaq === i ? 'rotate(45deg)' : 'rotate(0)',
                     transition: 'transform 0.4s ease',
                     flexShrink: 0,
@@ -1275,9 +1524,10 @@ export default function LuxorAgencyPremium() {
                   <p style={{
                     padding: isMobile ? '0 1.5rem 1.5rem' : '0 2rem 2rem',
                     margin: 0,
-                    fontSize: isMobile ? '0.9rem' : '1rem',
+                    fontSize: isMobile ? '0.95rem' : '1.05rem',
                     lineHeight: 1.9,
-                    color: hexToRgba(c.cream, 0.5),
+                    color: hexToRgba(c.creamSoft, 0.6),
+                    fontWeight: 300,
                   }}>
                     {faq.a}
                   </p>
@@ -1297,6 +1547,7 @@ export default function LuxorAgencyPremium() {
           minHeight: isMobile ? 'auto' : '100vh',
           display: 'flex',
           alignItems: 'center',
+          background: `linear-gradient(180deg, transparent 0%, ${hexToRgba(c.burgundy, 0.08)} 100%)`,
           ...sectionStyle('apply'),
         }}
       >
@@ -1307,7 +1558,7 @@ export default function LuxorAgencyPremium() {
           transform: 'translateY(-50%)',
           width: '50%',
           height: '80%',
-          background: `radial-gradient(ellipse at right, ${hexToRgba(c.gold, 0.05)} 0%, transparent 60%)`,
+          background: `radial-gradient(ellipse at right, ${hexToRgba(c.rose, 0.08)} 0%, transparent 60%)`,
           pointerEvents: 'none',
         }} />
 
@@ -1321,37 +1572,39 @@ export default function LuxorAgencyPremium() {
         }}>
           <div>
             <div style={{
-              fontFamily: '"Space Mono", monospace',
+              fontFamily: '"Montserrat", sans-serif',
               fontSize: '0.55rem',
+              fontWeight: 500,
               letterSpacing: '0.4em',
-              color: c.gold,
+              color: c.rose,
               marginBottom: '2rem',
             }}>
-              COMIENZA TU ASCENSO
+              {t.apply.overline}
             </div>
             <h2 style={{
               fontSize: isMobile ? 'clamp(2.5rem, 10vw, 4rem)' : 'clamp(3rem, 8vw, 5.5rem)',
-              fontWeight: 400,
+              fontWeight: 300,
               margin: 0,
               lineHeight: 1,
             }}>
-              <span style={{ display: 'block', fontStyle: 'italic' }}>¿Lista para</span>
+              <span style={{ display: 'block', fontStyle: 'italic', color: c.cream }}>{t.apply.title1}</span>
               <span style={{
                 display: 'block',
-                background: `linear-gradient(90deg, ${c.goldLight}, ${c.gold}, ${c.bronze})`,
+                background: `linear-gradient(90deg, ${c.rose}, ${c.coral}, ${c.gold})`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-              }}>trascender?</span>
+              }}>{t.apply.title2}</span>
             </h2>
             <p style={{
               marginTop: '2rem',
-              fontSize: isMobile ? '0.9rem' : '1rem',
+              fontSize: isMobile ? '0.95rem' : '1.1rem',
               lineHeight: 2.2,
-              color: hexToRgba(c.cream, 0.4),
+              color: hexToRgba(c.creamSoft, 0.5),
               maxWidth: 400,
+              fontWeight: 300,
             }}>
-              Aceptamos menos del 5% de aplicantes. Si estás seria sobre construir un legado, no solo un ingreso, deberíamos hablar.
+              {t.apply.subtitle}
             </p>
 
             <div className="hide-mobile" style={{
@@ -1359,24 +1612,22 @@ export default function LuxorAgencyPremium() {
               gap: '4rem',
               marginTop: '4rem',
               paddingTop: '3rem',
-              borderTop: `1px solid ${hexToRgba(c.gold, 0.1)}`,
+              borderTop: `1px solid ${hexToRgba(c.rose, 0.15)}`,
             }}>
-              {[
-                { value: '200+', label: 'Creadores activos' },
-                { value: '98%', label: 'Tasa de retención' },
-                { value: '3.2x', label: 'Crecimiento prom.' },
-              ].map((stat, i) => (
+              {t.apply.stats.map((stat, i) => (
                 <div key={i}>
                   <div style={{
-                    fontFamily: '"EB Garamond", serif',
-                    fontSize: '2rem',
+                    fontFamily: '"Cormorant Garamond", serif',
+                    fontSize: '2.2rem',
+                    fontWeight: 300,
                     fontStyle: 'italic',
-                    color: c.gold,
+                    color: c.rose,
                   }}>{stat.value}</div>
                   <div style={{
-                    fontFamily: '"Space Mono", monospace',
+                    fontFamily: '"Montserrat", sans-serif',
                     fontSize: '0.5rem',
-                    color: hexToRgba(c.cream, 0.3),
+                    fontWeight: 500,
+                    color: hexToRgba(c.creamSoft, 0.4),
                     letterSpacing: '0.1em',
                     marginTop: '0.5rem',
                   }}>{stat.label}</div>
@@ -1387,8 +1638,8 @@ export default function LuxorAgencyPremium() {
 
           {/* Form */}
           <div style={{
-            background: hexToRgba(c.charcoal, 0.3),
-            border: `1px solid ${hexToRgba(c.gold, 0.1)}`,
+            background: hexToRgba(c.darkAlt, 0.6),
+            border: `1px solid ${hexToRgba(c.rose, 0.15)}`,
             padding: isMobile ? '2.5rem' : '4rem',
             position: 'relative',
             overflow: 'hidden',
@@ -1397,7 +1648,7 @@ export default function LuxorAgencyPremium() {
             <div style={{
               position: 'absolute',
               inset: 0,
-              background: c.black,
+              background: c.dark,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -1412,49 +1663,53 @@ export default function LuxorAgencyPremium() {
                 width: 80,
                 height: 80,
                 borderRadius: '50%',
-                background: `linear-gradient(135deg, ${c.gold}, ${c.bronze})`,
+                background: `linear-gradient(135deg, ${c.rose}, ${c.burgundy})`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '2rem',
+                color: c.cream,
               }}>
                 ✓
               </div>
               <div style={{
-                fontFamily: '"Bebas Neue", sans-serif',
+                fontFamily: '"Cormorant Garamond", serif',
                 fontSize: '1.5rem',
+                fontWeight: 400,
                 letterSpacing: '0.2em',
-                color: c.gold,
+                color: c.rose,
               }}>
-                APLICACIÓN ENVIADA
+                {t.apply.form.success}
               </div>
               <p style={{
-                fontFamily: '"Space Mono", monospace',
-                fontSize: '0.6rem',
-                color: hexToRgba(c.cream, 0.5),
+                fontFamily: '"Montserrat", sans-serif',
+                fontSize: '0.7rem',
+                fontWeight: 400,
+                color: hexToRgba(c.creamSoft, 0.6),
                 textAlign: 'center',
               }}>
-                Te contactaremos en las próximas 24 horas
+                {t.apply.form.successMsg}
               </p>
             </div>
 
             <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
               {[
-                { label: 'Social handle', placeholder: '@tuhandle', key: 'handle' as const },
-                { label: 'Plataforma', placeholder: 'Instagram, TikTok, etc.', key: 'platform' as const },
-                { label: 'Seguidores actuales', placeholder: 'ej. 50k', key: 'following' as const },
-                { label: 'Contacto', placeholder: 'Telegram o email', key: 'contact' as const },
+                { label: t.apply.form.handle, placeholder: t.apply.form.handlePlaceholder, key: 'handle' as const },
+                { label: t.apply.form.platform, placeholder: t.apply.form.platformPlaceholder, key: 'platform' as const },
+                { label: t.apply.form.following, placeholder: t.apply.form.followingPlaceholder, key: 'following' as const },
+                { label: t.apply.form.contact, placeholder: t.apply.form.contactPlaceholder, key: 'contact' as const },
               ].map((field) => (
                 <div key={field.key}>
                   <label style={{
                     display: 'block',
-                    fontFamily: '"Space Mono", monospace',
+                    fontFamily: '"Montserrat", sans-serif',
                     fontSize: '0.5rem',
+                    fontWeight: 500,
                     letterSpacing: '0.25em',
                     textTransform: 'uppercase',
-                    color: c.gold,
+                    color: c.rose,
                     marginBottom: '1rem',
-                    opacity: 0.7,
+                    opacity: 0.8,
                   }}>{field.label}</label>
                   <input
                     type="text"
@@ -1474,11 +1729,12 @@ export default function LuxorAgencyPremium() {
                       padding: '1.2rem 0',
                       background: 'transparent',
                       border: 'none',
-                      borderBottom: `1px solid ${focusedInput === field.key ? c.gold : hexToRgba(c.gold, 0.2)}`,
+                      borderBottom: `1px solid ${focusedInput === field.key ? c.rose : hexToRgba(c.rose, 0.25)}`,
                       color: c.cream,
                       fontSize: '1.1rem',
-                      fontFamily: '"EB Garamond", serif',
+                      fontFamily: '"Cormorant Garamond", serif',
                       fontStyle: 'italic',
+                      fontWeight: 300,
                       outline: 'none',
                       transition: 'border-color 0.4s ease',
                       boxSizing: 'border-box',
@@ -1494,37 +1750,38 @@ export default function LuxorAgencyPremium() {
                 style={{
                   marginTop: '1rem',
                   padding: '1.5rem 3rem',
-                  background: c.gold,
-                  color: c.black,
+                  background: `linear-gradient(135deg, ${c.rose} 0%, ${c.roseDark} 100%)`,
+                  color: c.darker,
                   border: 'none',
                   fontSize: '0.65rem',
-                  fontFamily: '"Space Mono", monospace',
-                  fontWeight: 700,
+                  fontFamily: '"Montserrat", sans-serif',
+                  fontWeight: 600,
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',
                   transition: 'transform 0.4s ease, box-shadow 0.4s ease',
-                  boxShadow: `0 20px 60px ${hexToRgba(c.gold, 0.3)}`,
+                  boxShadow: `0 20px 60px ${hexToRgba(c.rose, 0.3)}`,
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = `0 30px 80px ${hexToRgba(c.gold, 0.4)}`;
+                  e.currentTarget.style.boxShadow = `0 30px 80px ${hexToRgba(c.rose, 0.4)}`;
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = `0 20px 60px ${hexToRgba(c.gold, 0.3)}`;
+                  e.currentTarget.style.boxShadow = `0 20px 60px ${hexToRgba(c.rose, 0.3)}`;
                 }}
               >
-                Enviar Aplicación
+                {t.apply.form.submit}
               </button>
 
               <p style={{
-                fontFamily: '"Space Mono", monospace',
+                fontFamily: '"Montserrat", sans-serif',
                 fontSize: '0.5rem',
-                color: hexToRgba(c.cream, 0.25),
+                fontWeight: 400,
+                color: hexToRgba(c.creamSoft, 0.35),
                 letterSpacing: '0.15em',
                 textAlign: 'center',
               }}>
-                {'\u25C6'} 100% confidencial {'\u25C6'} Respuesta en 24h {'\u25C6'}
+                {'\u2726'} {t.apply.form.confidential} {'\u2726'} {t.apply.form.response} {'\u2726'}
               </p>
             </form>
           </div>
@@ -1534,28 +1791,34 @@ export default function LuxorAgencyPremium() {
       {/* Footer */}
       <footer style={{
         padding: isMobile ? '4rem 1.5rem' : '6rem 4rem',
-        borderTop: `1px solid ${hexToRgba(c.gold, 0.1)}`,
+        borderTop: `1px solid ${hexToRgba(c.rose, 0.1)}`,
         display: 'grid',
         gridTemplateColumns: isMobile ? '1fr' : '1fr auto auto',
         gap: isMobile ? '2rem' : '4rem',
         alignItems: isMobile ? 'center' : 'end',
         textAlign: isMobile ? 'center' : 'left',
+        background: hexToRgba(c.darker, 0.5),
       }}>
         <div>
           <div style={{
-            fontFamily: '"Bebas Neue", sans-serif',
+            fontFamily: '"Cormorant Garamond", serif',
             fontSize: isMobile ? '2rem' : '3rem',
+            fontWeight: 300,
             letterSpacing: '0.2em',
-            color: c.gold,
+            background: `linear-gradient(135deg, ${c.rose}, ${c.coral})`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
             marginBottom: '1.5rem',
           }}>LUXOR</div>
           <div style={{
-            fontFamily: '"Space Mono", monospace',
+            fontFamily: '"Montserrat", sans-serif',
             fontSize: '0.5rem',
+            fontWeight: 400,
             letterSpacing: '0.2em',
-            color: hexToRgba(c.cream, 0.25),
+            color: hexToRgba(c.creamSoft, 0.35),
           }}>
-            &copy; 2025 — Donde las leyendas son creadas
+            &copy; 2025 — {t.footer.tagline}
           </div>
         </div>
 
@@ -1573,16 +1836,17 @@ export default function LuxorAgencyPremium() {
               onMouseEnter={() => setCursorVariant('hover')}
               onMouseLeave={() => setCursorVariant('default')}
               style={{
-                fontFamily: '"Space Mono", monospace',
+                fontFamily: '"Montserrat", sans-serif',
                 fontSize: '0.55rem',
+                fontWeight: 500,
                 letterSpacing: '0.2em',
-                color: hexToRgba(c.cream, 0.35),
+                color: hexToRgba(c.creamSoft, 0.4),
                 textDecoration: 'none',
                 textTransform: 'uppercase',
                 transition: 'color 0.3s ease',
               }}
-              onMouseOver={(e) => e.currentTarget.style.color = c.gold}
-              onMouseOut={(e) =>  e.currentTarget.style.color = hexToRgba(c.cream, 0.35)}
+              onMouseOver={(e) => e.currentTarget.style.color = c.rose}
+              onMouseOut={(e) => e.currentTarget.style.color = hexToRgba(c.creamSoft, 0.4)}
             >
               {link}
             </a>
@@ -1590,9 +1854,10 @@ export default function LuxorAgencyPremium() {
         </div>
 
         <div style={{
-          fontFamily: '"Space Mono", monospace',
+          fontFamily: '"Montserrat", sans-serif',
           fontSize: '0.5rem',
-          color: hexToRgba(c.gold, 0.4),
+          fontWeight: 500,
+          color: hexToRgba(c.rose, 0.5),
           letterSpacing: '0.15em',
         }}>
           18+ ONLY
@@ -1611,26 +1876,26 @@ export default function LuxorAgencyPremium() {
           width: isMobile ? 50 : 60,
           height: isMobile ? 50 : 60,
           borderRadius: '50%',
-          background: `linear-gradient(135deg, ${c.gold}, ${c.bronze})`,
+          background: `linear-gradient(135deg, ${c.rose}, ${c.burgundy})`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           textDecoration: 'none',
-          boxShadow: `0 10px 40px ${hexToRgba(c.gold, 0.4)}`,
+          boxShadow: `0 10px 40px ${hexToRgba(c.rose, 0.4)}`,
           zIndex: 90,
           transition: 'transform 0.4s ease, box-shadow 0.4s ease',
           animation: 'borderGlow 3s ease-in-out infinite',
         }}
         onMouseOver={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
-          e.currentTarget.style.boxShadow = `0 15px 50px ${hexToRgba(c.gold, 0.5)}`;
+          e.currentTarget.style.boxShadow = `0 15px 50px ${hexToRgba(c.rose, 0.5)}`;
         }}
         onMouseOut={(e) => {
           e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.boxShadow = `0 10px 40px ${hexToRgba(c.gold, 0.4)}`;
+          e.currentTarget.style.boxShadow = `0 10px 40px ${hexToRgba(c.rose, 0.4)}`;
         }}
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={c.black} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={c.cream} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 2L11 13" />
           <path d="M22 2L15 22L11 13L2 9L22 2Z" />
         </svg>
