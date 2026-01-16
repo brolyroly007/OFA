@@ -201,7 +201,6 @@ export default function LuxorAgencyPremium() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [formData, setFormData] = useState({ handle: '', platform: '', following: '', contact: '' });
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
   const [lang, setLang] = useState<'es' | 'en'>('es');
 
@@ -229,24 +228,6 @@ export default function LuxorAgencyPremium() {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
 
-    // Intersection Observer for scroll animations
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleSections((prev) => new Set([...prev, entry.target.id]));
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '-50px' }
-    );
-
-    setTimeout(() => {
-      document.querySelectorAll('section[id]').forEach((section) => {
-        observer.observe(section);
-      });
-    }, 100);
-
     const testimonialInterval = setInterval(() => {
       setActiveTestimonial((prev) => (prev + 1) % 3);
     }, 5000);
@@ -257,7 +238,6 @@ export default function LuxorAgencyPremium() {
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearInterval(testimonialInterval);
-      observer.disconnect();
     };
   }, []);
 
@@ -286,38 +266,34 @@ export default function LuxorAgencyPremium() {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
 
-  // NEW SENSUAL COLOR PALETTE - Rose Gold, Burgundy, Warm tones
+  // IMPROVED COLOR PALETTE - More vibrant and noticeable
   const c = {
-    // Backgrounds
-    dark: '#1a1216',        // Warm dark burgundy-black
-    darker: '#120c0f',      // Deeper background
-    darkAlt: '#241a1e',     // Card backgrounds
+    // Backgrounds - Slightly warmer
+    dark: '#1c1418',
+    darker: '#140f12',
+    darkAlt: '#261c21',
 
-    // Primary accent - Rose Gold
-    rose: '#e8b4b8',        // Light rose
-    roseGold: '#c9a0a0',    // Rose gold
-    roseDark: '#a67c7c',    // Darker rose
+    // Primary - Vibrant Rose/Coral
+    rose: '#ff9eab',           // Brighter rose
+    roseLight: '#ffb8c1',      // Light rose
+    roseDark: '#d4757f',       // Darker rose
 
-    // Secondary - Burgundy/Wine
-    burgundy: '#8b3a4c',    // Rich burgundy
-    wine: '#722f3e',        // Deep wine
+    // Secondary - Rich Burgundy/Wine
+    burgundy: '#a84d5f',       // Richer burgundy
+    wine: '#8a3a4a',           // Deep wine
+
+    // Accent - Warm Gold/Peach
+    gold: '#e8b896',           // Warm peachy gold
+    goldBright: '#ffd4b8',     // Brighter gold
+    coral: '#ff8a7a',          // Vibrant coral
+    peach: '#ffceb8',          // Soft peach
 
     // Text
-    cream: '#faf5f5',       // Warm cream
-    creamSoft: '#e8dede',   // Softer cream
-
-    // Accent
-    gold: '#d4a574',        // Warm gold
-    coral: '#e89b8c',       // Coral accent
+    cream: '#fff8f6',          // Warmer cream
+    creamSoft: '#f0e6e3',      // Softer cream
   };
 
   const cursorSize = cursorVariant === 'hover' ? 100 : cursorVariant === 'text' ? 150 : 20;
-
-  // Removed scroll animations - sections are always visible now
-  const sectionStyle = (_id: string): React.CSSProperties => ({
-    opacity: 1,
-    transform: 'translateY(0)',
-  });
 
   // Loading Screen
   if (!showContent) {
@@ -334,7 +310,7 @@ export default function LuxorAgencyPremium() {
         zIndex: 10000,
       }}>
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Raleway:wght@300;400;500;600&display=swap');
 
           @keyframes logoReveal {
             0% { opacity: 0; transform: translateY(30px); }
@@ -349,22 +325,17 @@ export default function LuxorAgencyPremium() {
           }
 
           @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
+            0%, 100% { opacity: 0.4; }
             50% { opacity: 1; }
-          }
-
-          @keyframes shimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
           }
         `}</style>
 
         <div style={{
-          fontFamily: '"Cormorant Garamond", serif',
+          fontFamily: '"Playfair Display", serif',
           fontSize: 'clamp(3rem, 10vw, 6rem)',
-          fontWeight: 300,
-          letterSpacing: '0.4em',
-          background: `linear-gradient(135deg, ${c.rose} 0%, ${c.roseGold} 50%, ${c.coral} 100%)`,
+          fontWeight: 500,
+          letterSpacing: '0.3em',
+          background: `linear-gradient(135deg, ${c.roseLight} 0%, ${c.coral} 50%, ${c.gold} 100%)`,
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
@@ -376,18 +347,18 @@ export default function LuxorAgencyPremium() {
 
         <div style={{
           width: 200,
-          height: 1,
-          background: `linear-gradient(90deg, transparent, ${c.rose}, transparent)`,
+          height: 2,
+          background: `linear-gradient(90deg, transparent, ${c.rose}, ${c.coral}, transparent)`,
           animation: loaded ? 'lineExpand 1s ease 0.3s forwards' : 'none',
           transform: 'scaleX(0)',
         }} />
 
         <div style={{
-          fontFamily: '"Montserrat", sans-serif',
-          fontSize: '0.6rem',
-          fontWeight: 400,
+          fontFamily: '"Raleway", sans-serif',
+          fontSize: '0.7rem',
+          fontWeight: 500,
           letterSpacing: '0.4em',
-          color: hexToRgba(c.rose, 0.6),
+          color: c.rose,
           animation: 'pulse 1.5s ease infinite',
         }}>
           {lang === 'es' ? 'CARGANDO EXCELENCIA' : 'LOADING EXCELLENCE'}
@@ -401,16 +372,16 @@ export default function LuxorAgencyPremium() {
       onMouseMove={handleMouseMove}
       style={{
         minHeight: '100vh',
-        background: `linear-gradient(180deg, ${c.darker} 0%, ${c.dark} 50%, ${c.darker} 100%)`,
+        background: c.darker,
         color: c.cream,
-        fontFamily: '"Cormorant Garamond", serif',
+        fontFamily: '"Playfair Display", serif',
         cursor: isMobile ? 'auto' : 'none',
         overflowX: 'hidden',
         position: 'relative',
       }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Raleway:wght@300;400;500;600&display=swap');
 
         * {
           cursor: ${isMobile ? 'auto' : 'none'} !important;
@@ -427,7 +398,7 @@ export default function LuxorAgencyPremium() {
         }
 
         input::placeholder, textarea::placeholder {
-          color: ${hexToRgba(c.rose, 0.4)};
+          color: ${hexToRgba(c.rose, 0.5)};
           font-style: italic;
         }
 
@@ -437,8 +408,8 @@ export default function LuxorAgencyPremium() {
         }
 
         @keyframes pulse {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.6; }
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 0.8; }
         }
 
         @keyframes slideUp {
@@ -452,8 +423,8 @@ export default function LuxorAgencyPremium() {
         }
 
         @keyframes borderGlow {
-          0%, 100% { box-shadow: 0 0 20px ${hexToRgba(c.rose, 0.2)}; }
-          50% { box-shadow: 0 0 40px ${hexToRgba(c.rose, 0.4)}; }
+          0%, 100% { box-shadow: 0 0 30px ${hexToRgba(c.coral, 0.4)}; }
+          50% { box-shadow: 0 0 50px ${hexToRgba(c.coral, 0.6)}; }
         }
 
         @keyframes gradientMove {
@@ -479,17 +450,17 @@ export default function LuxorAgencyPremium() {
         }
 
         ::-webkit-scrollbar {
-          width: 8px;
+          width: 6px;
         }
         ::-webkit-scrollbar-track {
           background: ${c.darker};
         }
         ::-webkit-scrollbar-thumb {
-          background: ${hexToRgba(c.rose, 0.3)};
-          border-radius: 4px;
+          background: ${c.burgundy};
+          border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-          background: ${hexToRgba(c.rose, 0.5)};
+          background: ${c.rose};
         }
       `}</style>
 
@@ -503,9 +474,9 @@ export default function LuxorAgencyPremium() {
             width: cursorSize,
             height: cursorSize,
             borderRadius: '50%',
-            border: `1px solid ${hexToRgba(c.rose, cursorVariant === 'default' ? 0.6 : 0.3)}`,
+            border: `2px solid ${hexToRgba(c.rose, cursorVariant === 'default' ? 0.8 : 0.4)}`,
             background: cursorVariant !== 'default'
-              ? `radial-gradient(circle, ${hexToRgba(c.rose, 0.15)} 0%, transparent 70%)`
+              ? `radial-gradient(circle, ${hexToRgba(c.coral, 0.2)} 0%, transparent 70%)`
               : 'transparent',
             pointerEvents: 'none',
             zIndex: 9999,
@@ -517,10 +488,10 @@ export default function LuxorAgencyPremium() {
             position: 'fixed',
             left: mousePos.x,
             top: mousePos.y,
-            width: 6,
-            height: 6,
+            width: 8,
+            height: 8,
             borderRadius: '50%',
-            background: c.rose,
+            background: `linear-gradient(135deg, ${c.rose}, ${c.coral})`,
             pointerEvents: 'none',
             zIndex: 10000,
             transform: 'translate(-50%, -50%)',
@@ -528,7 +499,7 @@ export default function LuxorAgencyPremium() {
         </>
       )}
 
-      {/* Ambient Background with warm gradients */}
+      {/* Ambient Background */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -536,9 +507,9 @@ export default function LuxorAgencyPremium() {
         right: 0,
         bottom: 0,
         background: `
-          radial-gradient(ellipse 80% 50% at 20% 20%, ${hexToRgba(c.burgundy, 0.15)} 0%, transparent 50%),
-          radial-gradient(ellipse 60% 40% at 80% 80%, ${hexToRgba(c.rose, 0.08)} 0%, transparent 50%),
-          radial-gradient(ellipse 100% 100% at 50% 0%, ${hexToRgba(c.wine, 0.1)} 0%, transparent 40%)
+          radial-gradient(ellipse 80% 60% at 20% 20%, ${hexToRgba(c.burgundy, 0.2)} 0%, transparent 50%),
+          radial-gradient(ellipse 60% 50% at 80% 70%, ${hexToRgba(c.coral, 0.12)} 0%, transparent 50%),
+          radial-gradient(ellipse 100% 100% at 50% 0%, ${hexToRgba(c.wine, 0.15)} 0%, transparent 40%)
         `,
         pointerEvents: 'none',
       }} />
@@ -551,12 +522,12 @@ export default function LuxorAgencyPremium() {
         right: 0,
         bottom: 0,
         backgroundImage: `
-          linear-gradient(${hexToRgba(c.rose, 0.03)} 1px, transparent 1px),
-          linear-gradient(90deg, ${hexToRgba(c.rose, 0.03)} 1px, transparent 1px)
+          linear-gradient(${hexToRgba(c.rose, 0.04)} 1px, transparent 1px),
+          linear-gradient(90deg, ${hexToRgba(c.rose, 0.04)} 1px, transparent 1px)
         `,
-        backgroundSize: '100px 100px',
+        backgroundSize: '80px 80px',
         pointerEvents: 'none',
-        opacity: 0.5,
+        opacity: 0.6,
       }} />
 
       {/* Floating Geometric Elements */}
@@ -564,9 +535,9 @@ export default function LuxorAgencyPremium() {
         position: 'fixed',
         top: '15%',
         right: '10%',
-        width: 300,
-        height: 300,
-        border: `1px solid ${hexToRgba(c.rose, 0.1)}`,
+        width: 280,
+        height: 280,
+        border: `2px solid ${hexToRgba(c.rose, 0.15)}`,
         transform: `rotate(45deg) translateY(${scrollY * 0.05}px)`,
         pointerEvents: 'none',
         animation: 'float 20s ease-in-out infinite',
@@ -575,27 +546,27 @@ export default function LuxorAgencyPremium() {
         position: 'fixed',
         bottom: '20%',
         left: '5%',
-        width: 200,
-        height: 200,
-        border: `1px solid ${hexToRgba(c.rose, 0.08)}`,
+        width: 180,
+        height: 180,
+        border: `2px solid ${hexToRgba(c.coral, 0.12)}`,
         borderRadius: '50%',
         transform: `translateY(${scrollY * -0.03}px)`,
         pointerEvents: 'none',
         animation: 'float 15s ease-in-out infinite reverse',
       }} />
 
-      {/* Navigation - IMPROVED VISIBILITY */}
+      {/* Navigation */}
       <nav style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
-        padding: isMobile ? '1.5rem' : '2rem 4rem',
+        padding: isMobile ? '1.5rem' : '2rem 5rem',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         zIndex: 100,
-        background: `linear-gradient(180deg, ${c.darker} 0%, ${hexToRgba(c.darker, 0.95)} 50%, ${hexToRgba(c.darker, 0.8)} 80%, transparent 100%)`,
+        background: `linear-gradient(180deg, ${c.darker} 0%, ${hexToRgba(c.darker, 0.98)} 60%, ${hexToRgba(c.darker, 0.9)} 80%, transparent 100%)`,
         backdropFilter: 'blur(20px)',
       }}>
         <div
@@ -603,11 +574,11 @@ export default function LuxorAgencyPremium() {
           onMouseLeave={() => setCursorVariant('default')}
           className="animate-in stagger-1"
           style={{
-            fontFamily: '"Cormorant Garamond", serif',
-            fontSize: isMobile ? '1.6rem' : '2rem',
-            fontWeight: 300,
-            letterSpacing: '0.3em',
-            background: `linear-gradient(135deg, ${c.rose} 0%, ${c.coral} 100%)`,
+            fontFamily: '"Playfair Display", serif',
+            fontSize: isMobile ? '1.8rem' : '2.2rem',
+            fontWeight: 500,
+            letterSpacing: '0.25em',
+            background: `linear-gradient(135deg, ${c.roseLight} 0%, ${c.coral} 50%, ${c.gold} 100%)`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
@@ -625,21 +596,21 @@ export default function LuxorAgencyPremium() {
           <div style={{
             display: 'flex',
             gap: '0.5rem',
-            fontFamily: '"Montserrat", sans-serif',
-            fontSize: '0.6rem',
+            fontFamily: '"Raleway", sans-serif',
+            fontSize: '0.65rem',
           }}>
             <button
               onClick={() => setLang('es')}
               onMouseEnter={() => setCursorVariant('hover')}
               onMouseLeave={() => setCursorVariant('default')}
               style={{
-                background: lang === 'es' ? hexToRgba(c.rose, 0.2) : 'transparent',
-                border: `1px solid ${hexToRgba(c.rose, lang === 'es' ? 0.5 : 0.2)}`,
-                color: lang === 'es' ? c.rose : hexToRgba(c.cream, 0.5),
-                padding: '0.4rem 0.6rem',
-                borderRadius: '2px',
+                background: lang === 'es' ? `linear-gradient(135deg, ${c.rose}, ${c.coral})` : 'transparent',
+                border: `1px solid ${lang === 'es' ? 'transparent' : hexToRgba(c.rose, 0.4)}`,
+                color: lang === 'es' ? c.darker : c.rose,
+                padding: '0.5rem 0.8rem',
+                borderRadius: '4px',
                 transition: 'all 0.3s ease',
-                fontWeight: 500,
+                fontWeight: 600,
               }}
             >
               ES
@@ -649,13 +620,13 @@ export default function LuxorAgencyPremium() {
               onMouseEnter={() => setCursorVariant('hover')}
               onMouseLeave={() => setCursorVariant('default')}
               style={{
-                background: lang === 'en' ? hexToRgba(c.rose, 0.2) : 'transparent',
-                border: `1px solid ${hexToRgba(c.rose, lang === 'en' ? 0.5 : 0.2)}`,
-                color: lang === 'en' ? c.rose : hexToRgba(c.cream, 0.5),
-                padding: '0.4rem 0.6rem',
-                borderRadius: '2px',
+                background: lang === 'en' ? `linear-gradient(135deg, ${c.rose}, ${c.coral})` : 'transparent',
+                border: `1px solid ${lang === 'en' ? 'transparent' : hexToRgba(c.rose, 0.4)}`,
+                color: lang === 'en' ? c.darker : c.rose,
+                padding: '0.5rem 0.8rem',
+                borderRadius: '4px',
                 transition: 'all 0.3s ease',
-                fontWeight: 500,
+                fontWeight: 600,
               }}
             >
               EN
@@ -665,11 +636,11 @@ export default function LuxorAgencyPremium() {
           {/* Nav Links */}
           <div style={{
             display: 'flex',
-            gap: isMobile ? '1.5rem' : '3rem',
-            fontFamily: '"Montserrat", sans-serif',
-            fontSize: isMobile ? '0.6rem' : '0.7rem',
-            fontWeight: 500,
-            letterSpacing: '0.15em',
+            gap: isMobile ? '1.5rem' : '2.5rem',
+            fontFamily: '"Raleway", sans-serif',
+            fontSize: isMobile ? '0.65rem' : '0.75rem',
+            fontWeight: 600,
+            letterSpacing: '0.12em',
             textTransform: 'uppercase',
           }}>
             {[
@@ -686,12 +657,12 @@ export default function LuxorAgencyPremium() {
                 style={{
                   color: c.cream,
                   textDecoration: 'none',
-                  transition: 'all 0.4s ease',
+                  transition: 'all 0.3s ease',
                   position: 'relative',
                   padding: '0.5rem 0',
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.color = c.rose;
+                  e.currentTarget.style.color = c.coral;
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.color = c.cream;
@@ -709,42 +680,51 @@ export default function LuxorAgencyPremium() {
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        padding: isMobile ? '7rem 1.5rem 4rem' : '0 4rem',
+        justifyContent: 'center',
+        padding: isMobile ? '8rem 1.5rem 4rem' : '0 5rem',
         position: 'relative',
       }}>
         <div style={{
-          maxWidth: '900px',
+          maxWidth: '1000px',
           position: 'relative',
           zIndex: 2,
           width: '100%',
+          textAlign: 'center',
         }}>
           <div
             className="animate-in stagger-1"
             style={{
-              fontFamily: '"Montserrat", sans-serif',
-              fontSize: isMobile ? '0.5rem' : '0.6rem',
-              fontWeight: 500,
-              letterSpacing: '0.5em',
-              color: c.rose,
+              fontFamily: '"Raleway", sans-serif',
+              fontSize: isMobile ? '0.6rem' : '0.75rem',
+              fontWeight: 600,
+              letterSpacing: '0.4em',
+              color: c.coral,
               marginBottom: isMobile ? '2rem' : '3rem',
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: '1.5rem',
             }}
           >
             <span style={{
               width: isMobile ? 40 : 60,
-              height: 1,
-              background: `linear-gradient(90deg, ${c.rose}, transparent)`,
+              height: 2,
+              background: `linear-gradient(90deg, transparent, ${c.coral})`,
               display: 'block',
             }} />
             {t.hero.overline}
+            <span style={{
+              width: isMobile ? 40 : 60,
+              height: 2,
+              background: `linear-gradient(90deg, ${c.coral}, transparent)`,
+              display: 'block',
+            }} />
           </div>
 
           <h1 style={{
-            fontSize: isMobile ? 'clamp(3rem, 15vw, 5rem)' : 'clamp(4rem, 12vw, 9rem)',
-            fontWeight: 300,
-            lineHeight: 0.9,
+            fontSize: isMobile ? 'clamp(2.8rem, 14vw, 4.5rem)' : 'clamp(4rem, 10vw, 8rem)',
+            fontWeight: 400,
+            lineHeight: 1,
             margin: 0,
           }}>
             <span
@@ -759,23 +739,22 @@ export default function LuxorAgencyPremium() {
               className="animate-in stagger-3"
               style={{
                 display: 'block',
-                marginLeft: isMobile ? '10%' : '15%',
-                fontWeight: 400,
-                background: `linear-gradient(135deg, ${c.rose} 0%, ${c.coral} 50%, ${c.gold} 100%)`,
+                fontWeight: 500,
+                background: `linear-gradient(135deg, ${c.roseLight} 0%, ${c.coral} 40%, ${c.goldBright} 100%)`,
                 backgroundSize: '200% 200%',
-                animation: 'gradientMove 5s ease infinite',
+                animation: 'gradientMove 4s ease infinite',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
+                padding: '0.2rem 0',
               }}
             >{t.hero.title2}</span>
             <span
               className="animate-in stagger-4"
               style={{
                 display: 'block',
-                marginLeft: isMobile ? '5%' : '8%',
                 fontStyle: 'italic',
-                color: hexToRgba(c.cream, 0.7),
+                color: hexToRgba(c.cream, 0.8),
               }}
             >{t.hero.title3}</span>
           </h1>
@@ -783,24 +762,28 @@ export default function LuxorAgencyPremium() {
           <p
             className="animate-in stagger-5"
             style={{
-              marginTop: isMobile ? '3rem' : '5rem',
-              maxWidth: '450px',
+              marginTop: isMobile ? '2.5rem' : '4rem',
+              maxWidth: '550px',
+              margin: isMobile ? '2.5rem auto 0' : '4rem auto 0',
               fontSize: isMobile ? '1rem' : '1.2rem',
               lineHeight: 2,
-              color: hexToRgba(c.creamSoft, 0.7),
-              fontWeight: 300,
+              color: hexToRgba(c.creamSoft, 0.75),
+              fontFamily: '"Raleway", sans-serif',
+              fontWeight: 400,
             }}
           >
             {t.hero.subtitle}
           </p>
 
           <div
-            className="animate-in stagger-6 mobile-stack"
+            className="animate-in stagger-6"
             style={{
-              marginTop: isMobile ? '2.5rem' : '4rem',
+              marginTop: isMobile ? '2.5rem' : '3.5rem',
               display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
               alignItems: 'center',
-              gap: '2rem',
+              justifyContent: 'center',
+              gap: isMobile ? '1.5rem' : '2rem',
             }}
           >
             <a
@@ -808,113 +791,57 @@ export default function LuxorAgencyPremium() {
               onMouseEnter={() => setCursorVariant('hover')}
               onMouseLeave={() => setCursorVariant('default')}
               style={{
-                padding: isMobile ? '1.2rem 2.5rem' : '1.5rem 3.5rem',
-                background: `linear-gradient(135deg, ${c.rose} 0%, ${c.roseDark} 100%)`,
+                padding: isMobile ? '1.2rem 3rem' : '1.4rem 4rem',
+                background: `linear-gradient(135deg, ${c.rose} 0%, ${c.coral} 100%)`,
                 color: c.darker,
                 textDecoration: 'none',
-                fontSize: '0.7rem',
-                fontFamily: '"Montserrat", sans-serif',
-                fontWeight: 600,
-                letterSpacing: '0.2em',
+                fontSize: '0.75rem',
+                fontFamily: '"Raleway", sans-serif',
+                fontWeight: 700,
+                letterSpacing: '0.18em',
                 textTransform: 'uppercase',
                 border: 'none',
+                borderRadius: '4px',
                 position: 'relative',
                 overflow: 'hidden',
                 transition: 'all 0.4s ease',
                 display: 'inline-block',
-                boxShadow: `0 10px 40px ${hexToRgba(c.rose, 0.3)}`,
+                boxShadow: `0 15px 50px ${hexToRgba(c.coral, 0.4)}`,
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.transform = 'translateY(-3px)';
-                e.currentTarget.style.boxShadow = `0 20px 60px ${hexToRgba(c.rose, 0.4)}`;
+                e.currentTarget.style.boxShadow = `0 25px 70px ${hexToRgba(c.coral, 0.5)}`;
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = `0 10px 40px ${hexToRgba(c.rose, 0.3)}`;
+                e.currentTarget.style.boxShadow = `0 15px 50px ${hexToRgba(c.coral, 0.4)}`;
               }}
             >
               {t.hero.cta}
             </a>
             <span style={{
-              fontFamily: '"Montserrat", sans-serif',
-              fontSize: '0.55rem',
-              color: hexToRgba(c.rose, 0.6),
+              fontFamily: '"Raleway", sans-serif',
+              fontSize: '0.7rem',
+              color: c.rose,
               letterSpacing: '0.1em',
+              fontWeight: 500,
             }}>
-              {t.hero.spots}
+              ✦ {t.hero.spots}
             </span>
           </div>
         </div>
 
-        {/* Hero Visual */}
+        {/* Hero Stats Side */}
         <div className="hide-mobile" style={{
           position: 'absolute',
-          right: '-5%',
-          top: '50%',
-          transform: `translateY(-50%) rotate(${scrollY * 0.02}deg)`,
-          width: '55vw',
-          height: '55vw',
-          maxWidth: 700,
-          maxHeight: 700,
-        }}>
-          <svg viewBox="0 0 400 400" style={{ width: '100%', height: '100%' }}>
-            <defs>
-              <linearGradient id="roseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={c.rose} stopOpacity="0.3" />
-                <stop offset="50%" stopColor={c.roseGold} stopOpacity="0.15" />
-                <stop offset="100%" stopColor={c.burgundy} stopOpacity="0.05" />
-              </linearGradient>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
-            <circle cx="200" cy="200" r="180" fill="none" stroke={c.rose} strokeWidth="0.3" strokeOpacity="0.2" />
-            <circle cx="200" cy="200" r="170" fill="none" stroke={c.rose} strokeWidth="0.5" strokeOpacity="0.1" />
-            <circle cx="200" cy="200" r="140" fill="none" stroke={c.rose} strokeWidth="0.3" strokeOpacity="0.15" strokeDasharray="4 8" />
-            <circle cx="200" cy="200" r="100" fill="url(#roseGrad)" />
-            <circle cx="200" cy="200" r="100" fill="none" stroke={c.rose} strokeWidth="0.5" strokeOpacity="0.3" />
-            <polygon points="200,120 260,230 140,230" fill="none" stroke={c.rose} strokeWidth="0.5" strokeOpacity="0.4" />
-            <polygon points="200,140 240,210 160,210" fill={hexToRgba(c.rose, 0.05)} stroke={c.rose} strokeWidth="0.3" strokeOpacity="0.2" />
-            <ellipse cx="200" cy="175" rx="25" ry="12" fill="none" stroke={c.rose} strokeWidth="0.5" strokeOpacity="0.5" filter="url(#glow)" />
-            <circle cx="200" cy="175" r="6" fill={c.rose} fillOpacity="0.3" />
-            {[0, 45, 90, 135, 180, 225, 270, 315].map(angle => (
-              <line
-                key={angle}
-                x1="200" y1="20" x2="200" y2="40"
-                stroke={c.rose} strokeWidth="0.5" strokeOpacity="0.3"
-                transform={`rotate(${angle} 200 200)`}
-              />
-            ))}
-          </svg>
-
-          <div style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '30%',
-            height: '30%',
-            background: `radial-gradient(circle, ${hexToRgba(c.rose, 0.2)} 0%, transparent 70%)`,
-            filter: 'blur(40px)',
-            animation: 'pulse 4s ease-in-out infinite',
-          }} />
-        </div>
-
-        {/* Stats floating */}
-        <div className="hide-mobile" style={{
-          position: 'absolute',
-          bottom: '15%',
+          bottom: '12%',
           right: '8%',
           textAlign: 'right',
         }}>
           <div style={{
-            fontFamily: '"Cormorant Garamond", serif',
-            fontSize: '5rem',
-            fontWeight: 300,
+            fontFamily: '"Playfair Display", serif',
+            fontSize: '4.5rem',
+            fontWeight: 400,
             fontStyle: 'italic',
             lineHeight: 1,
             background: `linear-gradient(135deg, ${c.cream} 0%, ${c.rose} 100%)`,
@@ -923,13 +850,13 @@ export default function LuxorAgencyPremium() {
             backgroundClip: 'text',
           }}>$47M</div>
           <div style={{
-            fontFamily: '"Montserrat", sans-serif',
-            fontSize: '0.5rem',
-            fontWeight: 500,
+            fontFamily: '"Raleway", sans-serif',
+            fontSize: '0.6rem',
+            fontWeight: 600,
             letterSpacing: '0.3em',
-            color: hexToRgba(c.rose, 0.7),
+            color: c.coral,
             textTransform: 'uppercase',
-            marginTop: '0.5rem',
+            marginTop: '0.8rem',
           }}>{t.hero.generated}</div>
         </div>
 
@@ -937,24 +864,25 @@ export default function LuxorAgencyPremium() {
         <div className="hide-mobile" style={{
           position: 'absolute',
           bottom: '4rem',
-          left: '4rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           gap: '1rem',
         }}>
           <div style={{
             width: 1,
-            height: 60,
-            background: `linear-gradient(180deg, ${c.rose}, transparent)`,
+            height: 50,
+            background: `linear-gradient(180deg, ${c.coral}, transparent)`,
           }} />
           <span style={{
-            fontFamily: '"Montserrat", sans-serif',
-            fontSize: '0.5rem',
-            fontWeight: 500,
-            letterSpacing: '0.3em',
-            color: hexToRgba(c.rose, 0.5),
+            fontFamily: '"Raleway", sans-serif',
+            fontSize: '0.55rem',
+            fontWeight: 600,
+            letterSpacing: '0.25em',
+            color: c.rose,
             textTransform: 'uppercase',
-            writingMode: 'vertical-rl',
           }}>Scroll</span>
         </div>
       </section>
@@ -966,9 +894,9 @@ export default function LuxorAgencyPremium() {
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '1rem',
-          borderTop: `1px solid ${hexToRgba(c.rose, 0.15)}`,
-          borderBottom: `1px solid ${hexToRgba(c.rose, 0.15)}`,
-          background: hexToRgba(c.darkAlt, 0.5),
+          borderTop: `2px solid ${hexToRgba(c.coral, 0.2)}`,
+          borderBottom: `2px solid ${hexToRgba(c.coral, 0.2)}`,
+          background: hexToRgba(c.darkAlt, 0.6),
         }}>
           {[
             { value: '$47M', label: t.stats.generated },
@@ -977,19 +905,22 @@ export default function LuxorAgencyPremium() {
           ].map((stat, i) => (
             <div key={i} style={{ textAlign: 'center' }}>
               <div style={{
-                fontFamily: '"Cormorant Garamond", serif',
+                fontFamily: '"Playfair Display", serif',
                 fontSize: '1.8rem',
-                fontWeight: 300,
+                fontWeight: 500,
                 fontStyle: 'italic',
-                color: c.rose,
+                background: `linear-gradient(135deg, ${c.rose}, ${c.coral})`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
               }}>{stat.value}</div>
               <div style={{
-                fontFamily: '"Montserrat", sans-serif',
-                fontSize: '0.45rem',
-                fontWeight: 500,
-                color: hexToRgba(c.cream, 0.5),
+                fontFamily: '"Raleway", sans-serif',
+                fontSize: '0.5rem',
+                fontWeight: 600,
+                color: hexToRgba(c.cream, 0.6),
                 letterSpacing: '0.1em',
-                marginTop: '0.3rem',
+                marginTop: '0.4rem',
               }}>{stat.label}</div>
             </div>
           ))}
@@ -998,30 +929,30 @@ export default function LuxorAgencyPremium() {
 
       {/* Marquee Section */}
       <section style={{
-        padding: isMobile ? '4rem 0' : '6rem 0',
-        borderTop: `1px solid ${hexToRgba(c.rose, 0.1)}`,
-        borderBottom: `1px solid ${hexToRgba(c.rose, 0.1)}`,
+        padding: isMobile ? '4rem 0' : '5rem 0',
+        borderTop: `1px solid ${hexToRgba(c.coral, 0.15)}`,
+        borderBottom: `1px solid ${hexToRgba(c.coral, 0.15)}`,
         overflow: 'hidden',
         position: 'relative',
-        background: hexToRgba(c.darkAlt, 0.3),
+        background: hexToRgba(c.darkAlt, 0.4),
       }}>
         <div style={{
           display: 'flex',
-          gap: isMobile ? '3rem' : '6rem',
-          animation: 'marquee 30s linear infinite',
+          gap: isMobile ? '3rem' : '5rem',
+          animation: 'marquee 25s linear infinite',
           whiteSpace: 'nowrap',
         }}>
           {[...Array(3)].map((_, i) => (
-            <div key={i} style={{ display: 'flex', gap: isMobile ? '3rem' : '6rem' }}>
+            <div key={i} style={{ display: 'flex', gap: isMobile ? '3rem' : '5rem' }}>
               {['Strategy', '\u2726', 'Growth', '\u2726', 'Revenue', '\u2726', 'Excellence', '\u2726', 'Legacy', '\u2726'].map((text, j) => (
                 <span
                   key={j}
                   style={{
-                    fontFamily: '"Cormorant Garamond", serif',
-                    fontSize: text === '\u2726' ? '1.5rem' : (isMobile ? '2rem' : '3.5rem'),
-                    fontWeight: 300,
-                    letterSpacing: text === '\u2726' ? 0 : '0.15em',
-                    color: text === '\u2726' ? c.rose : hexToRgba(c.cream, 0.15),
+                    fontFamily: '"Playfair Display", serif',
+                    fontSize: text === '\u2726' ? '1.2rem' : (isMobile ? '2rem' : '3rem'),
+                    fontWeight: text === '\u2726' ? 400 : 500,
+                    letterSpacing: text === '\u2726' ? 0 : '0.1em',
+                    color: text === '\u2726' ? c.coral : hexToRgba(c.cream, 0.2),
                   }}
                 >
                   {text}
@@ -1036,64 +967,63 @@ export default function LuxorAgencyPremium() {
       <section
         id="services"
         style={{
-          padding: isMobile ? '6rem 1.5rem' : '12rem 4rem',
+          padding: isMobile ? '5rem 1.5rem' : '10rem 5rem',
           position: 'relative',
-          ...sectionStyle('services'),
         }}
       >
+        {/* Section Header */}
         <div style={{
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          justifyContent: 'space-between',
-          alignItems: isMobile ? 'flex-start' : 'flex-start',
-          marginBottom: isMobile ? '4rem' : '8rem',
-          gap: isMobile ? '2rem' : '0',
+          textAlign: 'center',
+          marginBottom: isMobile ? '4rem' : '6rem',
+          maxWidth: '700px',
+          margin: '0 auto',
+          marginBottom: isMobile ? '4rem' : '6rem',
         }}>
-          <div>
-            <div style={{
-              fontFamily: '"Montserrat", sans-serif',
-              fontSize: '0.55rem',
-              fontWeight: 500,
-              letterSpacing: '0.4em',
-              color: c.rose,
-              marginBottom: '2rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-            }}>
-              <span style={{ width: 40, height: 1, background: c.rose }} />
-              {t.services.overline}
-            </div>
-            <h2 style={{
-              fontSize: isMobile ? 'clamp(2.5rem, 10vw, 4rem)' : 'clamp(3rem, 8vw, 6rem)',
-              fontWeight: 300,
-              fontStyle: 'italic',
-              margin: 0,
-              lineHeight: 1,
-              color: c.cream,
-            }}>
-              {t.services.title}
-            </h2>
-          </div>
-          <p className="hide-mobile" style={{
-            maxWidth: 350,
-            fontSize: '1rem',
-            lineHeight: 2,
-            color: hexToRgba(c.creamSoft, 0.5),
-            textAlign: 'right',
-            paddingTop: '3rem',
-            fontWeight: 300,
+          <div style={{
+            fontFamily: '"Raleway", sans-serif',
+            fontSize: '0.7rem',
+            fontWeight: 600,
+            letterSpacing: '0.35em',
+            color: c.coral,
+            marginBottom: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '1rem',
           }}>
-            {t.services.subtitle.split('.')[0]}.<br />
-            {t.services.subtitle.split('.')[1]}.
+            <span style={{ width: 30, height: 2, background: c.coral }} />
+            {t.services.overline}
+            <span style={{ width: 30, height: 2, background: c.coral }} />
+          </div>
+          <h2 style={{
+            fontSize: isMobile ? 'clamp(2.5rem, 10vw, 3.5rem)' : 'clamp(3rem, 7vw, 5rem)',
+            fontWeight: 400,
+            fontStyle: 'italic',
+            margin: 0,
+            lineHeight: 1.1,
+            color: c.cream,
+          }}>
+            {t.services.title}
+          </h2>
+          <p style={{
+            marginTop: '1.5rem',
+            fontSize: '1rem',
+            lineHeight: 1.8,
+            color: hexToRgba(c.creamSoft, 0.6),
+            fontFamily: '"Raleway", sans-serif',
+            fontWeight: 400,
+          }}>
+            {t.services.subtitle}
           </p>
         </div>
 
+        {/* Services Grid */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-          gap: '1px',
-          background: hexToRgba(c.rose, 0.15),
+          gap: isMobile ? '1.5rem' : '2rem',
+          maxWidth: '1200px',
+          margin: '0 auto',
         }}>
           {t.services.items.map((service, i) => (
             <div
@@ -1107,74 +1037,59 @@ export default function LuxorAgencyPremium() {
                 setCursorVariant('default');
               }}
               style={{
-                background: c.dark,
-                padding: isMobile ? '2.5rem' : '4rem',
-                minHeight: isMobile ? 250 : 350,
+                background: activeService === service.id
+                  ? `linear-gradient(135deg, ${hexToRgba(c.coral, 0.12)} 0%, ${hexToRgba(c.burgundy, 0.08)} 100%)`
+                  : hexToRgba(c.darkAlt, 0.6),
+                padding: isMobile ? '2rem' : '3rem',
+                borderRadius: '8px',
+                border: `1px solid ${hexToRgba(c.coral, activeService === service.id ? 0.4 : 0.12)}`,
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
+                gap: '1.5rem',
                 position: 'relative',
                 overflow: 'hidden',
-                transition: 'background 0.6s ease',
+                transition: 'all 0.5s ease',
               }}
             >
+              {/* Top Row: Number + Icon */}
               <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: `radial-gradient(circle at ${i % 2 === 0 ? '0% 100%' : '100% 100%'}, ${hexToRgba(c.rose, 0.1)} 0%, transparent 60%)`,
-                opacity: activeService === service.id ? 1 : 0,
-                transition: 'opacity 0.6s ease',
-              }} />
-
-              <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
                 <span style={{
-                  fontFamily: '"Montserrat", sans-serif',
-                  fontSize: '0.6rem',
-                  fontWeight: 500,
-                  color: c.rose,
-                  opacity: 0.5,
+                  fontFamily: '"Raleway", sans-serif',
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
+                  color: c.coral,
+                  letterSpacing: '0.1em',
                 }}>{service.id}</span>
                 <span style={{
-                  fontSize: '1.5rem',
-                  color: activeService === service.id ? c.rose : hexToRgba(c.rose, 0.3),
+                  fontSize: '2rem',
+                  color: activeService === service.id ? c.coral : hexToRgba(c.rose, 0.4),
                   transition: 'color 0.4s ease',
                 }}>{serviceIcons[i]}</span>
               </div>
 
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <h3 style={{
-                  fontSize: isMobile ? '1.5rem' : 'clamp(1.8rem, 4vw, 2.5rem)',
-                  fontWeight: 400,
-                  margin: '0 0 1.5rem 0',
-                  fontStyle: 'italic',
-                  transition: 'color 0.4s ease',
-                  color: activeService === service.id ? c.rose : c.cream,
-                }}>{service.name}</h3>
-                <p style={{
-                  fontSize: isMobile ? '0.9rem' : '1rem',
-                  lineHeight: 1.9,
-                  color: hexToRgba(c.creamSoft, 0.5),
-                  maxWidth: 400,
-                  fontWeight: 300,
-                  transition: 'opacity 0.6s ease, transform 0.6s ease',
-                  opacity: activeService === service.id || isMobile ? 1 : 0.7,
-                  transform: activeService === service.id ? 'translateY(0)' : 'translateY(10px)',
-                }}>{service.desc}</p>
-              </div>
+              {/* Title */}
+              <h3 style={{
+                fontSize: isMobile ? '1.4rem' : '1.8rem',
+                fontWeight: 500,
+                margin: 0,
+                fontStyle: 'italic',
+                transition: 'color 0.4s ease',
+                color: activeService === service.id ? c.roseLight : c.cream,
+              }}>{service.name}</h3>
 
-              <div className="hide-mobile" style={{
-                position: 'absolute',
-                top: '2rem',
-                right: '2rem',
-                width: 40,
-                height: 40,
-                border: `1px solid ${hexToRgba(c.rose, activeService === service.id ? 0.4 : 0.1)}`,
-                transition: 'border-color 0.4s ease, transform 0.4s ease',
-                transform: activeService === service.id ? 'rotate(45deg) scale(1.1)' : 'rotate(45deg)',
-              }} />
+              {/* Description */}
+              <p style={{
+                fontSize: isMobile ? '0.95rem' : '1rem',
+                lineHeight: 1.8,
+                color: hexToRgba(c.creamSoft, 0.65),
+                fontFamily: '"Raleway", sans-serif',
+                fontWeight: 400,
+                margin: 0,
+              }}>{service.desc}</p>
             </div>
           ))}
         </div>
@@ -1184,10 +1099,9 @@ export default function LuxorAgencyPremium() {
       <section
         id="investment"
         style={{
-          padding: isMobile ? '6rem 1.5rem' : '12rem 4rem',
-          background: `linear-gradient(180deg, transparent 0%, ${hexToRgba(c.burgundy, 0.05)} 50%, transparent 100%)`,
+          padding: isMobile ? '5rem 1.5rem' : '10rem 5rem',
+          background: `linear-gradient(180deg, transparent 0%, ${hexToRgba(c.burgundy, 0.08)} 50%, transparent 100%)`,
           position: 'relative',
-          ...sectionStyle('investment'),
         }}
       >
         <div className="hide-mobile" style={{
@@ -1195,11 +1109,11 @@ export default function LuxorAgencyPremium() {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          fontFamily: '"Cormorant Garamond", serif',
-          fontSize: 'clamp(15rem, 40vw, 35rem)',
-          fontWeight: 300,
-          color: hexToRgba(c.rose, 0.03),
-          letterSpacing: '0.1em',
+          fontFamily: '"Playfair Display", serif',
+          fontSize: 'clamp(12rem, 35vw, 28rem)',
+          fontWeight: 400,
+          color: hexToRgba(c.coral, 0.04),
+          letterSpacing: '0.08em',
           pointerEvents: 'none',
           whiteSpace: 'nowrap',
         }}>
@@ -1208,35 +1122,38 @@ export default function LuxorAgencyPremium() {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : '1fr 1.2fr',
-          gap: isMobile ? '3rem' : '8rem',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1.1fr',
+          gap: isMobile ? '3rem' : '6rem',
           alignItems: 'center',
           position: 'relative',
           zIndex: 1,
+          maxWidth: '1200px',
+          margin: '0 auto',
         }}>
-          <div>
+          {/* Left Text */}
+          <div style={{ textAlign: isMobile ? 'center' : 'left' }}>
             <div style={{
-              fontFamily: '"Montserrat", sans-serif',
-              fontSize: '0.55rem',
-              fontWeight: 500,
-              letterSpacing: '0.4em',
-              color: c.rose,
-              marginBottom: '2rem',
+              fontFamily: '"Raleway", sans-serif',
+              fontSize: '0.7rem',
+              fontWeight: 600,
+              letterSpacing: '0.35em',
+              color: c.coral,
+              marginBottom: '1.5rem',
             }}>
               {t.investment.overline}
             </div>
             <h2 style={{
-              fontSize: isMobile ? 'clamp(2.5rem, 10vw, 4rem)' : 'clamp(3rem, 7vw, 5rem)',
-              fontWeight: 300,
+              fontSize: isMobile ? 'clamp(2.5rem, 10vw, 3.5rem)' : 'clamp(3rem, 6vw, 4.5rem)',
+              fontWeight: 400,
               margin: 0,
-              lineHeight: 1.1,
+              lineHeight: 1.15,
             }}>
-              <span style={{ display: 'block', fontStyle: 'italic', color: hexToRgba(c.cream, 0.7) }}>
+              <span style={{ display: 'block', fontStyle: 'italic', color: c.cream }}>
                 {t.investment.title1}
               </span>
               <span style={{
                 display: 'block',
-                background: `linear-gradient(90deg, ${c.rose}, ${c.coral})`,
+                background: `linear-gradient(90deg, ${c.roseLight}, ${c.coral}, ${c.gold})`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -1246,17 +1163,20 @@ export default function LuxorAgencyPremium() {
             </h2>
             <p style={{
               marginTop: '2rem',
-              fontSize: isMobile ? '0.95rem' : '1.1rem',
-              lineHeight: 2.2,
-              color: hexToRgba(c.creamSoft, 0.5),
-              maxWidth: 380,
-              fontWeight: 300,
+              fontSize: isMobile ? '1rem' : '1.1rem',
+              lineHeight: 2,
+              color: hexToRgba(c.creamSoft, 0.6),
+              maxWidth: 420,
+              fontFamily: '"Raleway", sans-serif',
+              fontWeight: 400,
+              margin: isMobile ? '2rem auto 0' : '2rem 0 0 0',
             }}>
               {t.investment.subtitle}
             </p>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          {/* Right Plans */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {t.investment.plans.map((plan, i) => (
               <div
                 key={i}
@@ -1269,43 +1189,44 @@ export default function LuxorAgencyPremium() {
                   setCursorVariant('default');
                 }}
                 style={{
-                  padding: isMobile ? '2rem' : '3rem',
+                  padding: isMobile ? '1.8rem' : '2.5rem',
                   background: activePlan === i
-                    ? `linear-gradient(135deg, ${hexToRgba(c.rose, 0.15)} 0%, ${hexToRgba(c.burgundy, 0.08)} 100%)`
-                    : hexToRgba(c.darkAlt, 0.5),
-                  border: `1px solid ${hexToRgba(c.rose, activePlan === i ? 0.35 : 0.1)}`,
+                    ? `linear-gradient(135deg, ${hexToRgba(c.coral, 0.18)} 0%, ${hexToRgba(c.burgundy, 0.1)} 100%)`
+                    : hexToRgba(c.darkAlt, 0.6),
+                  border: `2px solid ${hexToRgba(c.coral, activePlan === i ? 0.5 : 0.15)}`,
+                  borderRadius: '8px',
                   display: 'grid',
                   gridTemplateColumns: '1fr auto',
                   alignItems: 'center',
                   gap: '1rem',
-                  transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                  transform: activePlan === i && !isMobile ? 'translateX(20px)' : 'translateX(0)',
+                  transition: 'all 0.4s ease',
+                  transform: activePlan === i && !isMobile ? 'translateX(10px)' : 'translateX(0)',
                 }}
               >
                 <div>
                   <div style={{
-                    fontFamily: '"Cormorant Garamond", serif',
-                    fontSize: isMobile ? '1.4rem' : '1.6rem',
-                    fontWeight: 400,
-                    letterSpacing: '0.1em',
-                    color: activePlan === i ? c.rose : c.cream,
+                    fontFamily: '"Playfair Display", serif',
+                    fontSize: isMobile ? '1.3rem' : '1.5rem',
+                    fontWeight: 500,
+                    letterSpacing: '0.08em',
+                    color: activePlan === i ? c.roseLight : c.cream,
                     transition: 'color 0.4s ease',
                   }}>{plan.name}</div>
                   <div style={{
-                    fontFamily: '"Montserrat", sans-serif',
-                    fontSize: '0.55rem',
+                    fontFamily: '"Raleway", sans-serif',
+                    fontSize: '0.75rem',
                     fontWeight: 400,
-                    color: hexToRgba(c.creamSoft, 0.4),
+                    color: hexToRgba(c.creamSoft, 0.55),
                     marginTop: '0.5rem',
-                    letterSpacing: '0.05em',
+                    letterSpacing: '0.03em',
                   }}>{plan.desc}</div>
                 </div>
                 <div style={{
-                  fontFamily: '"Cormorant Garamond", serif',
-                  fontSize: isMobile ? '2.5rem' : '3.5rem',
-                  fontWeight: 300,
+                  fontFamily: '"Playfair Display", serif',
+                  fontSize: isMobile ? '2.2rem' : '3rem',
+                  fontWeight: 500,
                   fontStyle: 'italic',
-                  background: `linear-gradient(135deg, ${c.rose}, ${c.coral})`,
+                  background: `linear-gradient(135deg, ${c.roseLight}, ${c.coral})`,
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
@@ -1320,29 +1241,28 @@ export default function LuxorAgencyPremium() {
       <section
         id="testimonials"
         style={{
-          padding: isMobile ? '6rem 1.5rem' : '10rem 4rem',
+          padding: isMobile ? '5rem 1.5rem' : '8rem 5rem',
           textAlign: 'center',
           position: 'relative',
-          background: hexToRgba(c.darkAlt, 0.3),
-          ...sectionStyle('testimonials'),
+          background: hexToRgba(c.darkAlt, 0.4),
         }}
       >
         <div style={{
-          fontFamily: '"Montserrat", sans-serif',
-          fontSize: '0.55rem',
-          fontWeight: 500,
-          letterSpacing: '0.4em',
-          color: c.rose,
+          fontFamily: '"Raleway", sans-serif',
+          fontSize: '0.7rem',
+          fontWeight: 600,
+          letterSpacing: '0.35em',
+          color: c.coral,
           marginBottom: '3rem',
         }}>
           {t.testimonials.overline}
         </div>
 
         <div style={{
-          maxWidth: 800,
+          maxWidth: 850,
           margin: '0 auto',
           position: 'relative',
-          minHeight: 280,
+          minHeight: 300,
         }}>
           {t.testimonials.items.map((testimonial, i) => (
             <div
@@ -1359,36 +1279,36 @@ export default function LuxorAgencyPremium() {
               }}
             >
               <div style={{
-                width: 70,
-                height: 70,
+                width: 80,
+                height: 80,
                 borderRadius: '50%',
-                background: `linear-gradient(135deg, ${c.rose}, ${c.burgundy})`,
+                background: `linear-gradient(135deg, ${c.rose}, ${c.coral})`,
                 margin: '0 auto 2rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontFamily: '"Cormorant Garamond", serif',
-                fontSize: '1.8rem',
-                fontWeight: 300,
-                color: c.cream,
+                fontFamily: '"Playfair Display", serif',
+                fontSize: '2rem',
+                fontWeight: 500,
+                color: c.darker,
               }}>
                 {['S', 'M', 'A'][i]}
               </div>
 
               <div style={{
-                fontFamily: '"Cormorant Garamond", serif',
-                fontSize: '4rem',
-                color: hexToRgba(c.rose, 0.25),
-                marginBottom: '-1rem',
+                fontFamily: '"Playfair Display", serif',
+                fontSize: '3.5rem',
+                color: hexToRgba(c.coral, 0.35),
+                marginBottom: '-0.5rem',
               }}>&ldquo;</div>
 
               <blockquote style={{
-                fontFamily: '"Cormorant Garamond", serif',
-                fontSize: isMobile ? 'clamp(1.2rem, 5vw, 1.8rem)' : 'clamp(1.5rem, 4vw, 2.2rem)',
+                fontFamily: '"Playfair Display", serif',
+                fontSize: isMobile ? 'clamp(1.2rem, 5vw, 1.7rem)' : 'clamp(1.5rem, 3.5vw, 2rem)',
                 fontStyle: 'italic',
-                fontWeight: 300,
+                fontWeight: 400,
                 lineHeight: 1.8,
-                color: hexToRgba(c.cream, 0.85),
+                color: c.cream,
                 margin: 0,
               }}>
                 {testimonial.quote}
@@ -1396,11 +1316,11 @@ export default function LuxorAgencyPremium() {
 
               <div style={{
                 marginTop: '2rem',
-                fontFamily: '"Montserrat", sans-serif',
-                fontSize: '0.6rem',
-                fontWeight: 500,
-                letterSpacing: '0.3em',
-                color: c.rose,
+                fontFamily: '"Raleway", sans-serif',
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                letterSpacing: '0.25em',
+                color: c.coral,
               }}>
                 — {testimonial.author}
               </div>
@@ -1408,10 +1328,11 @@ export default function LuxorAgencyPremium() {
           ))}
         </div>
 
+        {/* Dots */}
         <div style={{
           display: 'flex',
           justifyContent: 'center',
-          gap: '1rem',
+          gap: '0.8rem',
           marginTop: '3rem',
         }}>
           {t.testimonials.items.map((_, i) => (
@@ -1421,10 +1342,12 @@ export default function LuxorAgencyPremium() {
               onMouseEnter={() => setCursorVariant('hover')}
               onMouseLeave={() => setCursorVariant('default')}
               style={{
-                width: activeTestimonial === i ? 40 : 12,
+                width: activeTestimonial === i ? 35 : 12,
                 height: 12,
                 borderRadius: 6,
-                background: activeTestimonial === i ? c.rose : hexToRgba(c.rose, 0.25),
+                background: activeTestimonial === i
+                  ? `linear-gradient(90deg, ${c.rose}, ${c.coral})`
+                  : hexToRgba(c.coral, 0.3),
                 border: 'none',
                 transition: 'all 0.4s ease',
                 padding: 0,
@@ -1438,13 +1361,12 @@ export default function LuxorAgencyPremium() {
       <section
         id="faq"
         style={{
-          padding: isMobile ? '6rem 1.5rem' : '10rem 4rem',
+          padding: isMobile ? '5rem 1.5rem' : '8rem 5rem',
           position: 'relative',
-          ...sectionStyle('faq'),
         }}
       >
         <div style={{
-          maxWidth: 800,
+          maxWidth: 850,
           margin: '0 auto',
         }}>
           <div style={{
@@ -1452,18 +1374,18 @@ export default function LuxorAgencyPremium() {
             marginBottom: '4rem',
           }}>
             <div style={{
-              fontFamily: '"Montserrat", sans-serif',
-              fontSize: '0.55rem',
-              fontWeight: 500,
-              letterSpacing: '0.4em',
-              color: c.rose,
-              marginBottom: '2rem',
+              fontFamily: '"Raleway", sans-serif',
+              fontSize: '0.7rem',
+              fontWeight: 600,
+              letterSpacing: '0.35em',
+              color: c.coral,
+              marginBottom: '1.5rem',
             }}>
               {t.faq.overline}
             </div>
             <h2 style={{
-              fontSize: isMobile ? 'clamp(2rem, 8vw, 3rem)' : 'clamp(2.5rem, 6vw, 4rem)',
-              fontWeight: 300,
+              fontSize: isMobile ? 'clamp(2rem, 8vw, 2.8rem)' : 'clamp(2.5rem, 5vw, 3.5rem)',
+              fontWeight: 400,
               fontStyle: 'italic',
               margin: 0,
               color: c.cream,
@@ -1472,13 +1394,16 @@ export default function LuxorAgencyPremium() {
             </h2>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: hexToRgba(c.rose, 0.1) }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
             {t.faq.items.map((faq, i) => (
               <div
                 key={i}
                 style={{
-                  background: c.dark,
+                  background: hexToRgba(c.darkAlt, 0.6),
+                  borderRadius: '8px',
+                  border: `1px solid ${hexToRgba(c.coral, activeFaq === i ? 0.35 : 0.1)}`,
                   overflow: 'hidden',
+                  transition: 'border-color 0.3s ease',
                 }}
               >
                 <button
@@ -1487,7 +1412,7 @@ export default function LuxorAgencyPremium() {
                   onMouseLeave={() => setCursorVariant('default')}
                   style={{
                     width: '100%',
-                    padding: isMobile ? '1.5rem' : '2rem',
+                    padding: isMobile ? '1.5rem' : '1.8rem 2rem',
                     background: 'transparent',
                     border: 'none',
                     display: 'flex',
@@ -1498,20 +1423,21 @@ export default function LuxorAgencyPremium() {
                   }}
                 >
                   <span style={{
-                    fontFamily: '"Cormorant Garamond", serif',
-                    fontSize: isMobile ? '1.1rem' : '1.3rem',
-                    fontWeight: 400,
-                    color: activeFaq === i ? c.rose : c.cream,
+                    fontFamily: '"Playfair Display", serif',
+                    fontSize: isMobile ? '1.05rem' : '1.2rem',
+                    fontWeight: 500,
+                    color: activeFaq === i ? c.roseLight : c.cream,
                     transition: 'color 0.3s ease',
                   }}>
                     {faq.q}
                   </span>
                   <span style={{
-                    fontSize: '1.5rem',
-                    color: c.rose,
+                    fontSize: '1.4rem',
+                    color: c.coral,
                     transform: activeFaq === i ? 'rotate(45deg)' : 'rotate(0)',
                     transition: 'transform 0.4s ease',
                     flexShrink: 0,
+                    fontWeight: 300,
                   }}>
                     +
                   </span>
@@ -1525,9 +1451,10 @@ export default function LuxorAgencyPremium() {
                     padding: isMobile ? '0 1.5rem 1.5rem' : '0 2rem 2rem',
                     margin: 0,
                     fontSize: isMobile ? '0.95rem' : '1.05rem',
-                    lineHeight: 1.9,
-                    color: hexToRgba(c.creamSoft, 0.6),
-                    fontWeight: 300,
+                    lineHeight: 1.85,
+                    color: hexToRgba(c.creamSoft, 0.7),
+                    fontFamily: '"Raleway", sans-serif',
+                    fontWeight: 400,
                   }}>
                     {faq.a}
                   </p>
@@ -1542,13 +1469,9 @@ export default function LuxorAgencyPremium() {
       <section
         id="apply"
         style={{
-          padding: isMobile ? '6rem 1.5rem' : '12rem 4rem',
+          padding: isMobile ? '5rem 1.5rem' : '10rem 5rem',
           position: 'relative',
-          minHeight: isMobile ? 'auto' : '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          background: `linear-gradient(180deg, transparent 0%, ${hexToRgba(c.burgundy, 0.08)} 100%)`,
-          ...sectionStyle('apply'),
+          background: `linear-gradient(180deg, transparent 0%, ${hexToRgba(c.burgundy, 0.1)} 100%)`,
         }}
       >
         <div className="hide-mobile" style={{
@@ -1556,41 +1479,43 @@ export default function LuxorAgencyPremium() {
           top: '50%',
           right: 0,
           transform: 'translateY(-50%)',
-          width: '50%',
-          height: '80%',
-          background: `radial-gradient(ellipse at right, ${hexToRgba(c.rose, 0.08)} 0%, transparent 60%)`,
+          width: '45%',
+          height: '70%',
+          background: `radial-gradient(ellipse at right, ${hexToRgba(c.coral, 0.1)} 0%, transparent 60%)`,
           pointerEvents: 'none',
         }} />
 
         <div style={{
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-          gap: isMobile ? '3rem' : '8rem',
-          width: '100%',
+          gap: isMobile ? '3rem' : '6rem',
+          maxWidth: '1200px',
+          margin: '0 auto',
           position: 'relative',
           zIndex: 1,
         }}>
-          <div>
+          {/* Left Content */}
+          <div style={{ textAlign: isMobile ? 'center' : 'left' }}>
             <div style={{
-              fontFamily: '"Montserrat", sans-serif',
-              fontSize: '0.55rem',
-              fontWeight: 500,
-              letterSpacing: '0.4em',
-              color: c.rose,
-              marginBottom: '2rem',
+              fontFamily: '"Raleway", sans-serif',
+              fontSize: '0.7rem',
+              fontWeight: 600,
+              letterSpacing: '0.35em',
+              color: c.coral,
+              marginBottom: '1.5rem',
             }}>
               {t.apply.overline}
             </div>
             <h2 style={{
-              fontSize: isMobile ? 'clamp(2.5rem, 10vw, 4rem)' : 'clamp(3rem, 8vw, 5.5rem)',
-              fontWeight: 300,
+              fontSize: isMobile ? 'clamp(2.5rem, 10vw, 3.5rem)' : 'clamp(3rem, 7vw, 5rem)',
+              fontWeight: 400,
               margin: 0,
-              lineHeight: 1,
+              lineHeight: 1.1,
             }}>
               <span style={{ display: 'block', fontStyle: 'italic', color: c.cream }}>{t.apply.title1}</span>
               <span style={{
                 display: 'block',
-                background: `linear-gradient(90deg, ${c.rose}, ${c.coral}, ${c.gold})`,
+                background: `linear-gradient(90deg, ${c.roseLight}, ${c.coral}, ${c.goldBright})`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -1598,37 +1523,43 @@ export default function LuxorAgencyPremium() {
             </h2>
             <p style={{
               marginTop: '2rem',
-              fontSize: isMobile ? '0.95rem' : '1.1rem',
-              lineHeight: 2.2,
-              color: hexToRgba(c.creamSoft, 0.5),
-              maxWidth: 400,
-              fontWeight: 300,
+              fontSize: isMobile ? '1rem' : '1.1rem',
+              lineHeight: 2,
+              color: hexToRgba(c.creamSoft, 0.6),
+              maxWidth: 420,
+              fontFamily: '"Raleway", sans-serif',
+              fontWeight: 400,
+              margin: isMobile ? '2rem auto 0' : '2rem 0 0 0',
             }}>
               {t.apply.subtitle}
             </p>
 
+            {/* Stats */}
             <div className="hide-mobile" style={{
               display: 'flex',
-              gap: '4rem',
+              gap: '3rem',
               marginTop: '4rem',
-              paddingTop: '3rem',
-              borderTop: `1px solid ${hexToRgba(c.rose, 0.15)}`,
+              paddingTop: '2.5rem',
+              borderTop: `2px solid ${hexToRgba(c.coral, 0.2)}`,
             }}>
               {t.apply.stats.map((stat, i) => (
                 <div key={i}>
                   <div style={{
-                    fontFamily: '"Cormorant Garamond", serif',
-                    fontSize: '2.2rem',
-                    fontWeight: 300,
+                    fontFamily: '"Playfair Display", serif',
+                    fontSize: '2rem',
+                    fontWeight: 500,
                     fontStyle: 'italic',
-                    color: c.rose,
+                    background: `linear-gradient(135deg, ${c.rose}, ${c.coral})`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
                   }}>{stat.value}</div>
                   <div style={{
-                    fontFamily: '"Montserrat", sans-serif',
-                    fontSize: '0.5rem',
-                    fontWeight: 500,
-                    color: hexToRgba(c.creamSoft, 0.4),
-                    letterSpacing: '0.1em',
+                    fontFamily: '"Raleway", sans-serif',
+                    fontSize: '0.65rem',
+                    fontWeight: 600,
+                    color: hexToRgba(c.creamSoft, 0.5),
+                    letterSpacing: '0.08em',
                     marginTop: '0.5rem',
                   }}>{stat.label}</div>
                 </div>
@@ -1638,9 +1569,10 @@ export default function LuxorAgencyPremium() {
 
           {/* Form */}
           <div style={{
-            background: hexToRgba(c.darkAlt, 0.6),
-            border: `1px solid ${hexToRgba(c.rose, 0.15)}`,
-            padding: isMobile ? '2.5rem' : '4rem',
+            background: hexToRgba(c.darkAlt, 0.7),
+            border: `2px solid ${hexToRgba(c.coral, 0.2)}`,
+            borderRadius: '12px',
+            padding: isMobile ? '2.5rem' : '3.5rem',
             position: 'relative',
             overflow: 'hidden',
           }}>
@@ -1658,41 +1590,42 @@ export default function LuxorAgencyPremium() {
               pointerEvents: formSubmitted ? 'auto' : 'none',
               transition: 'opacity 0.5s ease',
               zIndex: 10,
+              borderRadius: '10px',
             }}>
               <div style={{
-                width: 80,
-                height: 80,
+                width: 90,
+                height: 90,
                 borderRadius: '50%',
-                background: `linear-gradient(135deg, ${c.rose}, ${c.burgundy})`,
+                background: `linear-gradient(135deg, ${c.rose}, ${c.coral})`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '2rem',
-                color: c.cream,
+                fontSize: '2.5rem',
+                color: c.darker,
               }}>
                 ✓
               </div>
               <div style={{
-                fontFamily: '"Cormorant Garamond", serif',
-                fontSize: '1.5rem',
-                fontWeight: 400,
-                letterSpacing: '0.2em',
-                color: c.rose,
+                fontFamily: '"Playfair Display", serif',
+                fontSize: '1.4rem',
+                fontWeight: 500,
+                letterSpacing: '0.15em',
+                color: c.roseLight,
               }}>
                 {t.apply.form.success}
               </div>
               <p style={{
-                fontFamily: '"Montserrat", sans-serif',
-                fontSize: '0.7rem',
+                fontFamily: '"Raleway", sans-serif',
+                fontSize: '0.85rem',
                 fontWeight: 400,
-                color: hexToRgba(c.creamSoft, 0.6),
+                color: hexToRgba(c.creamSoft, 0.7),
                 textAlign: 'center',
               }}>
                 {t.apply.form.successMsg}
               </p>
             </div>
 
-            <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.8rem' }}>
               {[
                 { label: t.apply.form.handle, placeholder: t.apply.form.handlePlaceholder, key: 'handle' as const },
                 { label: t.apply.form.platform, placeholder: t.apply.form.platformPlaceholder, key: 'platform' as const },
@@ -1702,14 +1635,13 @@ export default function LuxorAgencyPremium() {
                 <div key={field.key}>
                   <label style={{
                     display: 'block',
-                    fontFamily: '"Montserrat", sans-serif',
-                    fontSize: '0.5rem',
-                    fontWeight: 500,
-                    letterSpacing: '0.25em',
+                    fontFamily: '"Raleway", sans-serif',
+                    fontSize: '0.65rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.2em',
                     textTransform: 'uppercase',
-                    color: c.rose,
-                    marginBottom: '1rem',
-                    opacity: 0.8,
+                    color: c.coral,
+                    marginBottom: '0.8rem',
                   }}>{field.label}</label>
                   <input
                     type="text"
@@ -1726,15 +1658,15 @@ export default function LuxorAgencyPremium() {
                     }}
                     style={{
                       width: '100%',
-                      padding: '1.2rem 0',
+                      padding: '1rem 0',
                       background: 'transparent',
                       border: 'none',
-                      borderBottom: `1px solid ${focusedInput === field.key ? c.rose : hexToRgba(c.rose, 0.25)}`,
+                      borderBottom: `2px solid ${focusedInput === field.key ? c.coral : hexToRgba(c.coral, 0.3)}`,
                       color: c.cream,
                       fontSize: '1.1rem',
-                      fontFamily: '"Cormorant Garamond", serif',
+                      fontFamily: '"Playfair Display", serif',
                       fontStyle: 'italic',
-                      fontWeight: 300,
+                      fontWeight: 400,
                       outline: 'none',
                       transition: 'border-color 0.4s ease',
                       boxSizing: 'border-box',
@@ -1749,39 +1681,40 @@ export default function LuxorAgencyPremium() {
                 onMouseLeave={() => setCursorVariant('default')}
                 style={{
                   marginTop: '1rem',
-                  padding: '1.5rem 3rem',
-                  background: `linear-gradient(135deg, ${c.rose} 0%, ${c.roseDark} 100%)`,
+                  padding: '1.4rem 3rem',
+                  background: `linear-gradient(135deg, ${c.rose} 0%, ${c.coral} 100%)`,
                   color: c.darker,
                   border: 'none',
-                  fontSize: '0.65rem',
-                  fontFamily: '"Montserrat", sans-serif',
-                  fontWeight: 600,
-                  letterSpacing: '0.2em',
+                  borderRadius: '6px',
+                  fontSize: '0.75rem',
+                  fontFamily: '"Raleway", sans-serif',
+                  fontWeight: 700,
+                  letterSpacing: '0.18em',
                   textTransform: 'uppercase',
                   transition: 'transform 0.4s ease, box-shadow 0.4s ease',
-                  boxShadow: `0 20px 60px ${hexToRgba(c.rose, 0.3)}`,
+                  boxShadow: `0 20px 60px ${hexToRgba(c.coral, 0.35)}`,
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = `0 30px 80px ${hexToRgba(c.rose, 0.4)}`;
+                  e.currentTarget.style.boxShadow = `0 30px 80px ${hexToRgba(c.coral, 0.45)}`;
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = `0 20px 60px ${hexToRgba(c.rose, 0.3)}`;
+                  e.currentTarget.style.boxShadow = `0 20px 60px ${hexToRgba(c.coral, 0.35)}`;
                 }}
               >
                 {t.apply.form.submit}
               </button>
 
               <p style={{
-                fontFamily: '"Montserrat", sans-serif',
-                fontSize: '0.5rem',
-                fontWeight: 400,
-                color: hexToRgba(c.creamSoft, 0.35),
-                letterSpacing: '0.15em',
+                fontFamily: '"Raleway", sans-serif',
+                fontSize: '0.6rem',
+                fontWeight: 500,
+                color: hexToRgba(c.creamSoft, 0.45),
+                letterSpacing: '0.12em',
                 textAlign: 'center',
               }}>
-                {'\u2726'} {t.apply.form.confidential} {'\u2726'} {t.apply.form.response} {'\u2726'}
+                ✦ {t.apply.form.confidential} ✦ {t.apply.form.response} ✦
               </p>
             </form>
           </div>
@@ -1790,33 +1723,33 @@ export default function LuxorAgencyPremium() {
 
       {/* Footer */}
       <footer style={{
-        padding: isMobile ? '4rem 1.5rem' : '6rem 4rem',
-        borderTop: `1px solid ${hexToRgba(c.rose, 0.1)}`,
+        padding: isMobile ? '4rem 1.5rem' : '5rem 5rem',
+        borderTop: `2px solid ${hexToRgba(c.coral, 0.15)}`,
         display: 'grid',
         gridTemplateColumns: isMobile ? '1fr' : '1fr auto auto',
         gap: isMobile ? '2rem' : '4rem',
         alignItems: isMobile ? 'center' : 'end',
         textAlign: isMobile ? 'center' : 'left',
-        background: hexToRgba(c.darker, 0.5),
+        background: hexToRgba(c.darker, 0.6),
       }}>
         <div>
           <div style={{
-            fontFamily: '"Cormorant Garamond", serif',
-            fontSize: isMobile ? '2rem' : '3rem',
-            fontWeight: 300,
-            letterSpacing: '0.2em',
-            background: `linear-gradient(135deg, ${c.rose}, ${c.coral})`,
+            fontFamily: '"Playfair Display", serif',
+            fontSize: isMobile ? '2.2rem' : '2.8rem',
+            fontWeight: 500,
+            letterSpacing: '0.18em',
+            background: `linear-gradient(135deg, ${c.roseLight}, ${c.coral})`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
-            marginBottom: '1.5rem',
+            marginBottom: '1rem',
           }}>LUXOR</div>
           <div style={{
-            fontFamily: '"Montserrat", sans-serif',
-            fontSize: '0.5rem',
-            fontWeight: 400,
-            letterSpacing: '0.2em',
-            color: hexToRgba(c.creamSoft, 0.35),
+            fontFamily: '"Raleway", sans-serif',
+            fontSize: '0.6rem',
+            fontWeight: 500,
+            letterSpacing: '0.18em',
+            color: hexToRgba(c.creamSoft, 0.45),
           }}>
             &copy; 2025 — {t.footer.tagline}
           </div>
@@ -1836,17 +1769,17 @@ export default function LuxorAgencyPremium() {
               onMouseEnter={() => setCursorVariant('hover')}
               onMouseLeave={() => setCursorVariant('default')}
               style={{
-                fontFamily: '"Montserrat", sans-serif',
-                fontSize: '0.55rem',
-                fontWeight: 500,
-                letterSpacing: '0.2em',
-                color: hexToRgba(c.creamSoft, 0.4),
+                fontFamily: '"Raleway", sans-serif',
+                fontSize: '0.65rem',
+                fontWeight: 600,
+                letterSpacing: '0.15em',
+                color: hexToRgba(c.creamSoft, 0.5),
                 textDecoration: 'none',
                 textTransform: 'uppercase',
                 transition: 'color 0.3s ease',
               }}
-              onMouseOver={(e) => e.currentTarget.style.color = c.rose}
-              onMouseOut={(e) => e.currentTarget.style.color = hexToRgba(c.creamSoft, 0.4)}
+              onMouseOver={(e) => e.currentTarget.style.color = c.coral}
+              onMouseOut={(e) => e.currentTarget.style.color = hexToRgba(c.creamSoft, 0.5)}
             >
               {link}
             </a>
@@ -1854,11 +1787,11 @@ export default function LuxorAgencyPremium() {
         </div>
 
         <div style={{
-          fontFamily: '"Montserrat", sans-serif',
-          fontSize: '0.5rem',
-          fontWeight: 500,
-          color: hexToRgba(c.rose, 0.5),
-          letterSpacing: '0.15em',
+          fontFamily: '"Raleway", sans-serif',
+          fontSize: '0.6rem',
+          fontWeight: 700,
+          color: c.coral,
+          letterSpacing: '0.12em',
         }}>
           18+ ONLY
         </div>
@@ -1873,29 +1806,29 @@ export default function LuxorAgencyPremium() {
           position: 'fixed',
           bottom: isMobile ? '1.5rem' : '2rem',
           right: isMobile ? '1.5rem' : '2rem',
-          width: isMobile ? 50 : 60,
-          height: isMobile ? 50 : 60,
+          width: isMobile ? 55 : 65,
+          height: isMobile ? 55 : 65,
           borderRadius: '50%',
-          background: `linear-gradient(135deg, ${c.rose}, ${c.burgundy})`,
+          background: `linear-gradient(135deg, ${c.rose}, ${c.coral})`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           textDecoration: 'none',
-          boxShadow: `0 10px 40px ${hexToRgba(c.rose, 0.4)}`,
+          boxShadow: `0 15px 50px ${hexToRgba(c.coral, 0.5)}`,
           zIndex: 90,
           transition: 'transform 0.4s ease, box-shadow 0.4s ease',
           animation: 'borderGlow 3s ease-in-out infinite',
         }}
         onMouseOver={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
-          e.currentTarget.style.boxShadow = `0 15px 50px ${hexToRgba(c.rose, 0.5)}`;
+          e.currentTarget.style.boxShadow = `0 20px 60px ${hexToRgba(c.coral, 0.6)}`;
         }}
         onMouseOut={(e) => {
           e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.boxShadow = `0 10px 40px ${hexToRgba(c.rose, 0.4)}`;
+          e.currentTarget.style.boxShadow = `0 15px 50px ${hexToRgba(c.coral, 0.5)}`;
         }}
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={c.cream} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={c.darker} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 2L11 13" />
           <path d="M22 2L15 22L11 13L2 9L22 2Z" />
         </svg>
