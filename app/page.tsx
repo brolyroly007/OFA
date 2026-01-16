@@ -689,6 +689,26 @@ export default function SilverAgency() {
         }} />
 
         <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative' }}>
+          {/* Pink peeker character - holding onto section from top */}
+          <div style={{
+            position: 'absolute',
+            top: isMobile ? '-70px' : '-90px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: isMobile ? '130px' : '170px',
+            height: isMobile ? '80px' : '100px',
+            zIndex: 20,
+            pointerEvents: 'none',
+          }}>
+            <Image
+              src="/images/peeker-pink.gif"
+              alt="Peeker"
+              fill
+              style={{ objectFit: 'contain', objectPosition: 'bottom' }}
+              unoptimized
+            />
+          </div>
+
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <div style={{
               display: 'inline-block', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.2em',
@@ -699,28 +719,8 @@ export default function SilverAgency() {
             <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.5rem', fontWeight: 800 }}>{t.whyUs.title}</h2>
           </div>
 
-          {/* Comparison table with peeker */}
+          {/* Comparison table */}
           <div style={{ position: 'relative' }}>
-            {/* Pink peeker character - holding onto container edge */}
-            <div style={{
-              position: 'absolute',
-              top: isMobile ? '-45px' : '-65px',
-              left: isMobile ? '50%' : '50%',
-              transform: 'translateX(-50%)',
-              width: isMobile ? '120px' : '160px',
-              height: isMobile ? '70px' : '95px',
-              zIndex: 20,
-              pointerEvents: 'none',
-            }}>
-              <Image
-                src="/images/peeker-pink.gif"
-                alt="Peeker"
-                fill
-                style={{ objectFit: 'contain', objectPosition: 'bottom' }}
-                unoptimized
-              />
-            </div>
-
             <div style={{
               background: `${c.bg}ee`, borderRadius: '20px', border: `1px solid ${c.primary}40`,
               overflow: 'hidden', backdropFilter: 'blur(20px)',
