@@ -418,18 +418,28 @@ export default function SilverAgency() {
         }
       `}</style>
 
-      {/* Animated gradient background */}
+      {/* Animated GIF background */}
       <div style={{
         position: 'fixed',
         inset: 0,
-        background: `
-          radial-gradient(ellipse 80% 60% at 50% -10%, ${c.primary}25 0%, transparent 50%),
-          radial-gradient(ellipse 50% 50% at 100% 20%, ${c.secondary}20 0%, transparent 50%),
-          radial-gradient(ellipse 60% 50% at 0% 80%, ${c.accent}15 0%, transparent 50%)
-        `,
-        pointerEvents: 'none',
         zIndex: 0,
-      }} />
+        pointerEvents: 'none',
+      }}>
+        <Image
+          src="/images/bg-waves.gif"
+          alt=""
+          fill
+          style={{ objectFit: 'cover', opacity: 0.4 }}
+          unoptimized
+          priority
+        />
+        {/* Overlay gradient */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: `linear-gradient(180deg, ${c.bg}90 0%, transparent 30%, transparent 70%, ${c.bg} 100%)`,
+        }} />
+      </div>
 
       {/* Scroll progress */}
       <div style={{
